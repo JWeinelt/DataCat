@@ -55,7 +55,7 @@ public class WelcomeTab implements IEditorTab {
         actions.add(createActionButton("➕ " + translate("menu.cat.sql.new.table"), () -> {
             java.util.List<String> databases = new ArrayList<>();
             connection.getDatabases().forEach(d -> databases.add(d.name()));
-            connection.addCreateTableTab(ui.showSelectionDialog(ui.getFrame(), "Select database", databases));
+            //connection.addCreateTableTab(ui.showSelectionDialog(ui.getFrame(), "Select database", databases));
                 }
         ));
 
