@@ -1,4 +1,5 @@
 package de.julianweinelt.databench.dbx.api.ui.tree;
 
-public class TView {
+public interface TreeNodeType {
+    String getId();
 }

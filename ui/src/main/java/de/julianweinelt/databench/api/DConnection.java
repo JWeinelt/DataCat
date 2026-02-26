@@ -2,6 +2,10 @@ package de.julianweinelt.databench.api;
 
 import de.julianweinelt.databench.data.Project;
 import de.julianweinelt.databench.dbx.api.drivers.DriverManagerService;
+import de.julianweinelt.databench.dbx.api.ui.tree.NodeStructureRegistry;
+import de.julianweinelt.databench.dbx.api.ui.tree.ProjectTreeBuilder;
+import de.julianweinelt.databench.dbx.api.ui.tree.SwingTreeAdapter;
+import de.julianweinelt.databench.dbx.api.ui.tree.TreeNode;
 import de.julianweinelt.databench.dbx.database.DatabaseMetaData;
 import de.julianweinelt.databench.dbx.database.DatabaseRegistry;
 import de.julianweinelt.databench.ui.BenchUI;
@@ -114,12 +118,12 @@ public class DConnection implements IFileWatcherListener {
         setTreeRoot(root);
         setTree(new JTree(root));
         if (!lightEdit) {
-            getProjectTree();
+            refreshProjectTree();
 
             JButton refreshBtn = new JButton(translate("connection.button.refresh"));
             refreshBtn.addActionListener(e -> {
                 log.info("Refreshing project tree for {}", getProject().getName());
-                getProjectTree();
+                refreshProjectTree();
             });
             toolBar.add(refreshBtn);
             tree.addMouseListener(new MouseAdapter() {
@@ -629,99 +633,22 @@ public class DConnection implements IFileWatcherListener {
         return jobs;
     }
 
-    public void getProjectTree() {
-        benchUI.getFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        log.debug("Refreshing project tree for {}", getProject().getName());
-        treeRoot.removeAllChildren();
-        DefaultMutableTreeNode databases = new DefaultMutableTreeNode(translate("connection.tree.node.database.title"));
-        treeRoot.add(databases);
-        if (!checkConnection()) return;
-        for (DBObject s : getDatabases()) {
-            log.debug("Adding database {}", s.name);
-            DefaultMutableTreeNode db = new DefaultMutableTreeNode(s.name + (s.offline ? " (offline)" : ""));
-            databases.add(db);
-            if (s.offline) continue;
+    public void refreshProjectTree() {
+        NodeStructureRegistry structureRegistry = new NodeStructureRegistry();
 
-            DefaultMutableTreeNode tb = new DefaultMutableTreeNode(translate("connection.tree.node.tables.title"));
-            DefaultMutableTreeNode views = new DefaultMutableTreeNode(translate("connection.tree.node.views.title"));
-            DefaultMutableTreeNode procedures = new DefaultMutableTreeNode(translate("connection.tree.node.procedures.title"));
-            db.add(tb);
-            for (String t : getTables(s.name)) {
-                DefaultMutableTreeNode table = new DefaultMutableTreeNode(t);
-                tb.add(table);
-            }
-            for (String v : getViews(s.name)) {
-                DefaultMutableTreeNode view = new DefaultMutableTreeNode(v);
-                views.add(view);
-            }
-            db.add(views);
-            db.add(procedures);
-        }
+        //pluginManager.loadStructureExtensions(structureRegistry);
 
+        ProjectTreeBuilder builder =
+                new ProjectTreeBuilder(, structureRegistry);
 
-        DefaultMutableTreeNode jobAgent = new DefaultMutableTreeNode("SQL Agent");
-        DefaultMutableTreeNode jobs = new DefaultMutableTreeNode("Jobs");
+        TreeNode rootNode = builder.build();
 
-        for (JobObject job : getSQLJobs()) {
-            DefaultMutableTreeNode jobNode = new DefaultMutableTreeNode(job.name);
-            jobs.add(jobNode);
-        }
+        SwingTreeAdapter adapter = new SwingTreeAdapter();
 
-        DefaultMutableTreeNode protocols = new DefaultMutableTreeNode("Protocol");
-        DefaultMutableTreeNode errors = new DefaultMutableTreeNode("Errors");
-        jobAgent.add(jobs);
-        jobAgent.add(protocols);
-        jobAgent.add(errors);
-        //treeRoot.add(jobAgent);
+        DefaultMutableTreeNode swingRoot =
+                adapter.toSwingNode(rootNode);
 
-        tree.setCellRenderer(new DefaultTreeCellRenderer() {
-            @Override
-            public Component getTreeCellRendererComponent(JTree tree, Object value,
-                                                          boolean selected, boolean expanded,
-                                                          boolean leaf, int row, boolean hasFocus) {
-                super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-
-                if (value instanceof DefaultMutableTreeNode node) {
-                    Object userObject = node.getUserObject();
-                    if ("SQL Agent".equals(userObject)) {
-                        setIcon(new ImageIcon(getClassURL("/icons/app/agent.png")));
-                    } else if (translate("connection.tree.node.tables.title").equals(userObject)) {
-                        setIcon(loadIcon("/icons/editor/files/folder.png", 16));
-                    } else if (translate("connection.tree.node.views.title").equals(userObject)) {
-                        setIcon(loadIcon("/icons/editor/files/folder.png", 16));
-                    } else if (translate("connection.tree.node.procedures.title").equals(userObject)) {
-                        setIcon(loadIcon("/icons/editor/files/folder.png", 16));
-                    } else if (translate("connection.tree.node.database.title").equals(userObject)) {
-                        setIcon(loadIcon("/icons/editor/files/folder.png", 16));
-                    }
-                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
-                    if (parent != null) {
-                        Object parentObject = parent.getUserObject();
-                        if (translate("connection.tree.node.database.title").equals(parentObject.toString())) {
-                            if (userObject.toString().endsWith("(offline)")) {
-                                setIcon(loadIcon("/icons/editor/database-offline.png", 16));
-                            } else
-                                setIcon(loadIcon("/icons/editor/database.png", 16));
-                        } else if (translate("connection.tree.node.tables.title").equals(parentObject.toString())) {
-                            setIcon(loadIcon("/icons/app/table.png", 16));
-                        } else if (translate("connection.tree.node.views.title").equals(parentObject.toString())) {
-                            setIcon(loadIcon("/icons/app/view.png", 16));
-                        } else if ("SQL Agent".equals(parentObject.toString())) {
-                            setIcon(new ImageIcon(getClassURL("/icons/app/folder.png")));
-                        } else if ("Jobs".equals(parentObject.toString())) {
-                            setIcon(new ImageIcon(getClassURL("/icons/app/job.png")));
-                        }
-                    }
-                }
-
-                return this;
-            }
-        });
-
-        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-        model.reload();
-        tree.expandPath(new TreePath(databases.getPath()));
-        benchUI.getFrame().setCursor(Cursor.getDefaultCursor());
+        tree.setModel(new DefaultTreeModel(swingRoot));
     }
 
     private Icon loadIcon(String path, int size) {
@@ -742,7 +669,7 @@ public class DConnection implements IFileWatcherListener {
 
         if (name.equals(translate("connection.tree.node.database.title"))) {
             JMenuItem refresh = new JMenuItem(translate("connection.button.refresh"));
-            refresh.addActionListener(e -> getProjectTree());
+            refresh.addActionListener(e -> refreshProjectTree());
             JMenuItem newDB = new JMenuItem(translate("connection.tree.node.database.create"));
             newDB.addActionListener(e -> addEditorTab("CREATE DATABASE ${name};"));
             menu.add(refresh);
@@ -811,7 +738,7 @@ public class DConnection implements IFileWatcherListener {
             create.addActionListener(e -> addCreateTableTab(((DefaultMutableTreeNode) node.getParent()).getUserObject().toString()));
             menu.add(create);
             JMenuItem refresh = new JMenuItem(translate("connection.button.refresh"));
-            refresh.addActionListener(e -> getProjectTree());
+            refresh.addActionListener(e -> refreshProjectTree());
             menu.add(refresh);
         }
 
