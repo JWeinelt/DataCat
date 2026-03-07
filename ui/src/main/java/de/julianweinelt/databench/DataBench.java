@@ -18,6 +18,7 @@ import de.julianweinelt.databench.service.UpdateChecker;
 import de.julianweinelt.databench.ui.BenchUI;
 import de.julianweinelt.databench.ui.DefaultUI;
 import de.julianweinelt.databench.ui.StartScreen;
+import de.julianweinelt.databench.util.SecretManager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -140,13 +141,19 @@ public class DataBench {
 
         log.info("Loading project data...");
         projectManager = new ProjectManager();
-        String password = askForPassword();
-        while (true) {
-            boolean success = projectManager.loadAllProjects(password);
-            if (success) break;
-            wrongPasswordCounter++;
-            log.warn("Wrong password.");
+        String password = SecretManager.loadPassword();
+        if (password == null) {
             password = askForPassword();
+            while (true) {
+                boolean success = projectManager.loadAllProjects(password);
+                if (success) break;
+                wrongPasswordCounter++;
+                log.warn("Wrong password.");
+                password = askForPassword();
+            }
+            SecretManager.save(password);
+        } else {
+            projectManager.loadAllProjects(password);
         }
 
         fileManager = new FileManager();
