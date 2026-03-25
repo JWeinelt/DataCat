@@ -11,6 +11,7 @@ import de.julianweinelt.databench.dbx.api.ui.ShortcutManager;
 import de.julianweinelt.databench.dbx.api.ui.menubar.Menu;
 import de.julianweinelt.databench.dbx.api.ui.menubar.MenuItem;
 import de.julianweinelt.databench.dbx.api.ui.menubar.MenuManager;
+import de.julianweinelt.databench.ui.admin.AdministrationDialog;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -107,6 +108,7 @@ public final class SystemPlugin extends DbxPlugin {
 
         Menu sqlMenu = new Menu(translate("menu.cat.sql"), "sql")
                 .child(new MenuItem("Run SQL...", "sql_run"))
+                .child(new MenuItem(translate("menu.cat.sql.admin"), "sql_admin").action(() -> new AdministrationDialog(getMainFrame())))
                 .priority(996);
 
 
