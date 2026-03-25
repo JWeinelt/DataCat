@@ -1,6 +1,7 @@
 package de.julianweinelt.databench.api;
 
 import de.julianweinelt.databench.data.Project;
+import de.julianweinelt.databench.data.ProjectManager;
 import de.julianweinelt.databench.dbx.api.drivers.DriverManagerService;
 import de.julianweinelt.databench.dbx.database.DatabaseMetaData;
 import de.julianweinelt.databench.dbx.database.DatabaseRegistry;
@@ -9,6 +10,7 @@ import de.julianweinelt.databench.ui.editor.*;
 import de.julianweinelt.databench.ui.flow.FlowClient;
 import de.julianweinelt.databench.ui.flow.FlowUI;
 import de.julianweinelt.databench.util.FileUtil;
+import de.julianweinelt.databench.util.SecretManager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -438,10 +440,10 @@ public class DConnection implements IFileWatcherListener {
     }
 
     public void handleWindowClosing(JFrame frame) {
+        log.info("Saving tabs...");
         FileManager.instance().save(editorTabs, project);
         boolean unsaved = hasUnsavedChanges();
         if (!unsaved) {
-            frame.dispose();
             return;
         }
 
@@ -470,7 +472,6 @@ public class DConnection implements IFileWatcherListener {
                 removeTab(tab);
             }
         }
-        frame.dispose();
     }
 
     public boolean hasUnsavedChanges() {
@@ -522,6 +523,11 @@ public class DConnection implements IFileWatcherListener {
                     "but your server returned 'MariaDB'. Should it be updated in the project?", "Database Mismatch", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 project.setDatabaseType("mariadb");
+                try {
+                    ProjectManager.instance().saveProjectFile(project, SecretManager.loadPassword());
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(benchUI.getFrame(), "Failed to save project file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         return future;
