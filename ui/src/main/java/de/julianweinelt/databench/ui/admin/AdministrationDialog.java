@@ -39,6 +39,7 @@ public class AdministrationDialog extends JDialog {
         setPreferredSize(new Dimension(1100, 700));
         pack();
         setLocationRelativeTo(owner);
+        setVisible(true);
     }
 
     private JComponent createBottomBar() {

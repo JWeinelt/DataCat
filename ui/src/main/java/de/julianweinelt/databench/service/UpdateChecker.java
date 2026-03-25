@@ -19,6 +19,7 @@ import static de.julianweinelt.databench.dbx.util.LanguageManager.translate;
 @Slf4j
 public class UpdateChecker {
     private final BenchUI ui;
+    //TODO: Change api url
 
     public UpdateChecker(BenchUI ui) {
         this.ui = ui;

@@ -184,5 +184,6 @@ public class DriverManagerDialog extends JDialog {
 
     private void deleteDriverJar(Driver driver) {
         File dir = DbxAPI.driversFolder();
+        //TODO: Delete drivers jar file
     }
 }

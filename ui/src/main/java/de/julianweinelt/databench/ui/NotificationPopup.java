@@ -1,5 +1,7 @@
 package de.julianweinelt.databench.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,19 +11,20 @@ import java.awt.geom.RoundRectangle2D;
 
 public class NotificationPopup extends JWindow {
     private Timer autoCloseTimer;
-    private final NotificationType type;
+    @Getter
+    private final NotificationType notificationType;
 
     public NotificationPopup(
             JFrame owner,
             Component anchor,
-            NotificationType type,
+            NotificationType notificationType,
             String title,
             String message,
             String linkText,
             Runnable linkAction
     ) {
         super(owner);
-        this.type = type;
+        this.notificationType = notificationType;
 
         setSize(360, 120);
         setAlwaysOnTop(true);
@@ -29,7 +32,7 @@ public class NotificationPopup extends JWindow {
 
         JPanel accent = new JPanel();
         accent.setPreferredSize(new Dimension(4, 1));
-        accent.setBackground(type.accentColor());
+        accent.setBackground(notificationType.accentColor());
 
         JPanel root = new RoundedPanel(16);
         root.setBackground(new Color(60, 63, 65));
@@ -41,8 +44,8 @@ public class NotificationPopup extends JWindow {
 
         JLabel titleLabel = new JLabel(title);
         titleLabel.setForeground(
-                type == NotificationType.ERROR || type == NotificationType.WARNING
-                        ? type.accentColor()
+                notificationType == NotificationType.ERROR || notificationType == NotificationType.WARNING
+                        ? notificationType.accentColor()
                         : Color.WHITE
         );
         titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 13f));
@@ -82,7 +85,7 @@ public class NotificationPopup extends JWindow {
         if (linkText != null && linkAction != null) {
             content.add(Box.createVerticalStrut(6));
             JLabel link = new JLabel("<html><u>" + linkText + "</u></html>");
-            link.setForeground(type.accentColor());
+            link.setForeground(notificationType.accentColor());
             link.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             link.setFont(link.getFont().deriveFont(12f));
             link.addMouseListener(new MouseAdapter() {
@@ -107,8 +110,8 @@ public class NotificationPopup extends JWindow {
 
         positionRelativeTo(anchor);
 
-        if (type.hasAutoClose()) {
-            startAutoClose(type.autoCloseMillis());
+        if (notificationType.hasAutoClose()) {
+            startAutoClose(notificationType.autoCloseMillis());
         }
     }
 

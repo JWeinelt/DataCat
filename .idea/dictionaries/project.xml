@@ -3,6 +3,7 @@
     <words>
       <w>dbtype</w>
       <w>mariadb</w>
+      <w>sqlserver</w>
     </words>
   </dictionary>
 </component>

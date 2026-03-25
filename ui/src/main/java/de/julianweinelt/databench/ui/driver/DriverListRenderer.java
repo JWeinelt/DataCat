@@ -26,10 +26,10 @@ public class DriverListRenderer extends DefaultListCellRenderer {
             }
 
             String simpleName = realDriver.getClass().getSimpleName();
-            String fqcn = realDriver.getClass().getName();
+            String name = realDriver.getClass().getName();
 
             setText(simpleName);
-            setToolTipText(fqcn);
+            setToolTipText(name);
         }
 
         return this;

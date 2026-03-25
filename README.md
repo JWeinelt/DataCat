@@ -2,9 +2,9 @@
 
 [![Translate](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/translate/crowdin_64h.png?raw=true)](https://crowdin.com/project/databench)
 
-# 💾 DataBench
+# 😺 DataCat
 
-Databench is an open-source software tool designed to help users manage and analyze their databases, no matter which engine.
+DataCat is an open-source software tool designed to help users manage and analyze their databases, no matter which engine.
 
 ## 🔒 Features
 - 😊 User-friendly interface for managing databases
@@ -33,15 +33,15 @@ TODO Future features:
 Download the appropriate version for your operating system (Windows, macOS, or Linux) and follow the installation instructions provided.
 
 ## 🚀 Getting Started
-1. Launch DataBench after installation.
+1. Launch DataCat after installation.
 2. Set up an encryption password for securing your database connections.
 3. Add a new database connection by providing the necessary details (host, port, username, password, database name).
 4. Start managing and analyzing your databases using the intuitive interface.
 
 ## 🖼 Screenshots
 *These screenshots were taken with the material UI theme*
-![DataBench Home Screen](screenshots/mainmenu.png)
-![DataBench Home Screen](screenshots/create_tables.png)
-![DataBench Home Screen](screenshots/alter_table.png)
-![DataBench Home Screen](screenshots/welcome_page.png)
-![DataBench Home Screen](screenshots/editor_1.png)
+![DataCat Home Screen](screenshots/mainmenu.png)
+![DataCat Create Table Screen](screenshots/create_tables.png)
+![DataCat Alter Table Screen](screenshots/alter_table.png)
+![DataCat Welcome Screen](screenshots/welcome_page.png)
+![DataCat Editor Screen](screenshots/editor_1.png)

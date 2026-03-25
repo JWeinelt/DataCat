@@ -14,8 +14,6 @@ public class DriverDownloadDialog extends JDialog {
     private final JComboBox<String> versionBox;
     private final JTextArea infoArea;
 
-    private boolean modal;
-
     private final String[] mySQLVersions = {
             "9.5.0",
             "9.4.0","9.3.0","9.2.0","9.1.0","9.0.0",
@@ -51,6 +49,8 @@ public class DriverDownloadDialog extends JDialog {
             "postgresql", new String[]{"42.7.8", "42.7.7", "42.7.6", "42.7.5", "42.7.4", "42.7.3", "42.7.1"}
     );
 
+    //TODO: Move version data to central server
+
     private String fromInternalDBName(String name) {
         return switch (name) {
             case "mysql" -> "MySQL";
@@ -72,7 +72,6 @@ public class DriverDownloadDialog extends JDialog {
 
     public DriverDownloadDialog(Window parent, boolean modal) {
         super(parent, translate("dialog.driver.download.title"), ModalityType.APPLICATION_MODAL);
-        this.modal = modal;
         setSize(520, 360);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout(10, 10));

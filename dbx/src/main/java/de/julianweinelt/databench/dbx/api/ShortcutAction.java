@@ -2,7 +2,11 @@ package de.julianweinelt.databench.dbx.api;
 
 import javax.swing.*;
 
-@Deprecated
+/**
+ * Deprecated. Will be removed in future version v1.1.0<br>
+ * Use {@link de.julianweinelt.databench.dbx.api.ui.ShortcutAction} instead.
+ */
+@Deprecated(forRemoval = true)
 public enum ShortcutAction {
     NEW_FILE("New File", KeyStroke.getKeyStroke("control N")),
     PREFERENCES("Preferences", KeyStroke.getKeyStroke("control P")),
