@@ -138,8 +138,11 @@ public class ImportDialog extends JDialog implements ImportListener {
                     translate("dialog.import.cancel.dialog.title"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null);
             if (val == JOptionPane.YES_OPTION) {
                 if (importThread != null && importThread.isAlive()) importThread.interrupt();
-                targetDatabase.rollback();
+                try {
+                    targetDatabase.rollback();
+                } catch (Exception ignored) {}
                 dispose();
+                taskbar.setWindowProgressState(this, Taskbar.State.OFF);
             }
         });
         startButton.addActionListener(e -> startImport());
