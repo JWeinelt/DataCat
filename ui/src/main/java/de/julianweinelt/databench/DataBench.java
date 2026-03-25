@@ -3,6 +3,7 @@ package de.julianweinelt.databench;
 import com.formdev.flatlaf.FlatDarkLaf;
 import de.julianweinelt.databench.api.DConnection;
 import de.julianweinelt.databench.api.FileManager;
+import de.julianweinelt.databench.api.StatisticUtil;
 import de.julianweinelt.databench.data.ConfigManager;
 import de.julianweinelt.databench.data.Configuration;
 import de.julianweinelt.databench.data.ProjectManager;
@@ -137,6 +138,8 @@ public class DataBench {
         configManager.loadConfig();
         configManager.getConfiguration().initHomeDirectories();
         log.info("Loaded DataBench pre-config with installation id: {}", configManager.getConfiguration().getInstallationID());
+
+        if (configManager.getConfiguration().isSendAnonymousData()) StatisticUtil.sendStartup();
 
         log.info("Loading project data...");
         projectManager = new ProjectManager();
