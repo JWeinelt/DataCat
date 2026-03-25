@@ -12,8 +12,10 @@ import de.julianweinelt.databench.dbx.api.events.Subscribe;
 import de.julianweinelt.databench.dbx.api.ui.ShortcutManager;
 import de.julianweinelt.databench.dbx.api.ui.menubar.MenuBar;
 import de.julianweinelt.databench.dbx.database.DatabaseRegistry;
+import de.julianweinelt.databench.dbx.util.NewsFetcher;
 import de.julianweinelt.databench.service.UpdateChecker;
 import de.julianweinelt.databench.ui.plugins.PluginDialog;
+import de.julianweinelt.databench.util.SecretManager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +25,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +61,6 @@ public class BenchUI {
 
         frame = new JFrame();
         DataBench.getInstance().setOverFrame(frame);
-        createMenuBar();
         frame.setFont(Configuration.getConfiguration().getEditorFontObject());
         frame.setIconImage(icon);
         frame.setSize(1024, 600);
@@ -66,6 +70,7 @@ public class BenchUI {
         frame.setLayout(new BorderLayout());
 
         registerShortcuts(frame);
+
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -78,6 +83,7 @@ public class BenchUI {
         frame.add(tabbedPane, BorderLayout.CENTER);
 
         frame.setVisible(true);
+        createMenuBar();
 
         UpdateChecker.instance().checkForUpdates(false);
         frame.setTitle(translate("main.title", Map.of("version", DataBench.version)));
@@ -294,14 +300,17 @@ public class BenchUI {
 
     //TODO: Make news dynamic
     private JComponent createNewsPanel() {
+        NewsFetcher.News news = NewsFetcher.fetch();
+
         JPanel panel = new JPanel(new BorderLayout(8, 8));
         panel.setBorder(BorderFactory.createTitledBorder(translate("startpage.news.title")));
 
         JPanel header = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Example");
+        JLabel titleLabel = new JLabel(news.title());
         titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 16f));
 
-        JLabel dateLabel = new JLabel("2026-01-15");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        JLabel dateLabel = new JLabel(dateTimeFormatter.format(Instant.ofEpochSecond(news.date()).atZone(ZoneId.systemDefault())));
         dateLabel.setFont(dateLabel.getFont().deriveFont(Font.PLAIN, 11f));
 
         JPanel titleBox = new JPanel();
@@ -322,15 +331,7 @@ public class BenchUI {
         JEditorPane editorPane = new JEditorPane();
         editorPane.setContentType("text/html");
         editorPane.setEditable(false);
-        editorPane.setText("""
-        <html>
-            <body style='font-family:Segoe UI;'>
-                <p>This is <b>HTML content</b>.</p>
-                <p>You can show images:</p>
-                <img src="https://via.placeholder.com/300x120"/>
-            </body>
-        </html>
-    """);
+        editorPane.setText(news.text());
 
         editorPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
 
@@ -509,8 +510,8 @@ public class BenchUI {
             );
 
             try {
-                ProjectManager.instance().addProject(project, Configuration.getConfiguration().getEncryptionPassword());
-                ProjectManager.instance().saveProjectFile(project, Configuration.getConfiguration().getEncryptionPassword());
+                ProjectManager.instance().addProject(project, SecretManager.loadPassword());
+                ProjectManager.instance().saveProjectFile(project, SecretManager.loadPassword());
 
                 JPanel card = project.createCard(this);
                 cardsContainer.add(card);
@@ -985,6 +986,7 @@ public class BenchUI {
                 DConnection connection = connections.get(project);
                 connection.handleWindowClosing(frame);
             }
+            log.info("Connections closed.");
         }
     }
 
