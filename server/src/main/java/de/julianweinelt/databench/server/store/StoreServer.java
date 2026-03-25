@@ -13,6 +13,16 @@ public class StoreServer {
     private boolean maintenance = true;
     private Javalin app;
 
+    public StoreServer() {
+        File mainStore = new File("store");
+        if (mainStore.mkdirs()) {
+            File pluginFolder = new File(mainStore, "plugins");
+            if (pluginFolder.mkdirs()) {
+                new File(pluginFolder, "images").mkdirs();
+            }
+        }
+    }
+
     public void start() {
         app = Javalin.create(conf -> {
             conf.showJavalinBanner = false;
@@ -33,11 +43,25 @@ public class StoreServer {
                     if (isStaticFile) {
                         return;
                     }
+                    if (path.startsWith("/api")) return;
 
                     ctx.status(503);
                     ctx.contentType("text/html");
                     ctx.result(Files.readString(new File("public-store/maintenance/index.html").toPath()));
                     ctx.skipRemainingHandlers();
+                })
+                .get("/api/v1/assets/plugins/{id}/image", ctx -> {
+                    String id = ctx.pathParam("id");
+                    File file = new File("store/plugins/images/" + id + ".png");
+                    if (file.exists()) {
+                        ctx.contentType("image/png");
+                        ctx.result(Files.newInputStream(file.toPath()));
+                    } else {
+                        ctx.status(404);
+                    }
+                })
+                .get("/api/v1/plugin", ctx -> {
+
                 })
         .start(7001);
     }
