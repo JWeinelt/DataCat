@@ -36,7 +36,6 @@ public class ProjectManager {
     }
     public void removeProject(Project project) {
         projects.remove(project);
-
     }
 
     public void saveProjectFile(Project project, String password) throws Exception {
