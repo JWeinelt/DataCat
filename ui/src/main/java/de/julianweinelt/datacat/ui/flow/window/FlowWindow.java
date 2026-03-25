@@ -12,7 +12,7 @@ public class FlowWindow {
     private CardLayout cards;
 
     public void open() {
-        frame = new JFrame("DataBench Flow");
+        frame = new JFrame("DataCat Flow");
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setSize(1100, 700);
         frame.setLocationRelativeTo(null);

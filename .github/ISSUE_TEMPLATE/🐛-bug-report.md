@@ -1,13 +1,13 @@
 ---
 name: "\U0001F41B Bug Report"
-about: Report a bug in DataBench
+about: Report a bug in DataCat
 title: "[BUG] "
 labels: ''
 assignees: ''
 
 ---
 
-**Affected Part of DataBench**
+**Affected Part of DataCat**
 - [ ] UI (Editor)
 - [ ] Launcher
 - [ ] Server
@@ -31,7 +31,7 @@ What actually happens?
 Please add screenshots, logs or error codes
 
 **Environment**
-- DataBench Version: [e.g. 1.0.0]
+- DataCat Version: [e.g. 1.0.0]
 - Operating system: [e.g. Windows 11, macOS, Linux]
 - Java Version: [e.g. 17]
 

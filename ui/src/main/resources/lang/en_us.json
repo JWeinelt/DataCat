@@ -40,7 +40,7 @@
   "menu.cat.changes": "Show Changelog",
   "menu.cat.datasend": "Anonymous Data Sending...",
 
-  "screen.main.welcome": "Welcome to DataBench!",
+  "screen.main.welcome": "Welcome to DataCat!",
   "screen.main.home": "Home",
   "screen.main.profile.import": "Import Project",
   "screen.main.profile.create": "Create Project",
@@ -102,7 +102,7 @@
 
   "dialog.save.title": "Save File",
   "dialog.save.extension.sql": "SQL Files (*.sql)",
-  "dialog.save.extension.dbproj": "DataBench Project Files (*.dbproj)",
+  "dialog.save.extension.dbproj": "DataCat Project Files (*.dbproj)",
   "dialog.save.wrong-format": "You may save files only with .sql extension.",
   "dialog.title.warn": "Warning",
   "dialog.title.error": "Error",
@@ -131,7 +131,7 @@
   "dialog.profile.open.driver.no-connection.title": "Failure",
   "dialog.profile.open.driver.no-connection.description": "No connection could be established.",
 
-  "main.title": "DataBench v${version}",
+  "main.title": "DataCat v${version}",
 
   "dialog.license.title": "License Information",
 
@@ -166,7 +166,7 @@
   "project.tabs.files": "File System",
   "project.tabs.database": "Database",
 
-  "anonymous-data.text": "We would like to collect anonymous usage statistics to help improve DataBench. This data includes only a randomly generated installation ID and no personal information.\n\nYour data will remain private and will be used solely for analytics.\n\nDo you agree to send anonymous usage data?",
+  "anonymous-data.text": "We would like to collect anonymous usage statistics to help improve DataCat. This data includes only a randomly generated installation ID and no personal information.\n\nYour data will remain private and will be used solely for analytics.\n\nDo you agree to send anonymous usage data?",
   "anonymous-data.deny": "Allow",
   "anonymous-data.allow": "Deny",
 
@@ -293,11 +293,11 @@
   "page.settings.appearance.colors": "Colors",
 
   "notification.update-ready.title": "Update Downloaded",
-  "notification.update-ready.text": "A newer version of DataBench has been downloaded. Please restart the application to apply the changes.",
+  "notification.update-ready.text": "A newer version of DataCat has been downloaded. Please restart the application to apply the changes.",
   "notification.update-ready.link": "Restart now",
 
   "notification.update-available.title": "Update available",
-  "notification.update-available.text": "A new DataBench version is available.",
+  "notification.update-available.text": "A new DataCat version is available.",
   "notification.update-available.link": "Download now",
 
   "notification.no-update.title": "No updates available",

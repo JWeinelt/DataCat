@@ -1,7 +1,7 @@
 param(
 [string]$AppName = "DataCat",
 [string]$MainJar = "launcher.jar",
-[string]$MainClass = "de.julianweinelt.databench.launcher.Launcher",
+[string]$MainClass = "de.julianweinelt.datacat.launcher.Launcher",
 [string]$Version = "1.0.0"
 )
 

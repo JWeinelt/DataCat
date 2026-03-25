@@ -22,7 +22,7 @@ public class WelcomePage implements WizardPage {
         panel.setBackground(UIManager.getColor("Panel.background"));
 
         // Titel
-        JLabel title = new JLabel("Welcome to DataBench");
+        JLabel title = new JLabel("Welcome to DataCat");
         title.setFont(title.getFont().deriveFont(Font.BOLD, 24f));
         panel.add(title, BorderLayout.NORTH);
 
@@ -38,7 +38,7 @@ public class WelcomePage implements WizardPage {
         panel.add(bullets, BorderLayout.CENTER);
 
         // Optional checkbox: Start after setup
-        JCheckBox startNow = new JCheckBox("Start DataBench automatically after setup", true);
+        JCheckBox startNow = new JCheckBox("Start DataCat automatically after setup", true);
         startNow.setBackground(panel.getBackground());
         startNow.addActionListener(e -> state.startAfterFinish = startNow.isSelected());
         panel.add(startNow, BorderLayout.SOUTH);

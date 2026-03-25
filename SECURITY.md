@@ -12,5 +12,5 @@ currently being supported with security updates.
 ## Reporting a Vulnerability
 
 You can report any vulnerabilities via:
-- [eMail to databench@julianweinelt.de](mailto:databench@julianweinelt.de)
+- [eMail to datacat@julianweinelt.de](mailto:datacat@julianweinelt.de)
 - Writing _justcody a message on Discord

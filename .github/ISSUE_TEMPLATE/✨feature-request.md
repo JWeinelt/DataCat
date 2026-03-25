@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Part of DataBench**
+**Part of DataCat**
 - [ ] UI (Editor)
 - [ ] Launcher
 - [ ] Server

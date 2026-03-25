@@ -1,5 +1,5 @@
-# 💾 DataBench Flow
-This module contains the flow component of DataBench. 
+# 💾 DataCat Flow
+This module contains the flow component of DataCat. 
 With Flow installed on your database server machine, you can get features not directly
 supported by your database, such as an SQL Agent for MySQL or MariaDB servers.
 
@@ -12,26 +12,26 @@ automating routine database tasks such as backups, maintenance, and data process
 > but you have to make sure that the software can connect to your database server.
  
 ### 🔓 Requirements
-- Currently, DataBench Flow only supports MySQL and MariaDB databases.
+- Currently, DataCat Flow only supports MySQL and MariaDB databases.
 - Java Runtime Environment (JRE) 17 or higher installed on the server machine.
-- Network access to the database server from the machine where the DataBench Flow is installed.
+- Network access to the database server from the machine where the DataCat Flow is installed.
 - A database user with sufficient privileges to execute the scheduled SQL jobs.
 - (Optional) Firewall rules allowing incoming connections to Flow on the specified port.
 
 > [!TIP]
-> You may open the port ``47386`` (TCP) and ``47387`` (TCP) on your firewall to allow remote access to the DataBench Flow.
-> This is required if you want to manage the sql agent jobs from DataBench.
+> You may open the port ``47386`` (TCP) and ``47387`` (TCP) on your firewall to allow remote access to the DataCat Flow.
+> This is required if you want to manage the sql agent jobs from DataCat.
 
 ### 📫 Installation Steps
-1. Download the latest release of Flow from the [GitHub Releases](https://github.com/JWeinelt/DataBench/releases) page.
-    - Make sure to choose the latest version of the DataBench Flow.
+1. Download the latest release of Flow from the [GitHub Releases](https://github.com/JWeinelt/DataCat/releases) page.
+    - Make sure to choose the latest version of the DataCat Flow.
     - The Flow is platform-independent, so you can run it on any operating system that supports Java.
 2. Put the downloaded JAR file on your server machine in a directory of your choice.
 3. Open a terminal or command prompt on the server machine (if running a cli-only server, just navigate to the directory).
 4. Create a new ``start.sh`` file (Linux/macOS) or ``start.bat`` file (Windows) in the same directory as the JAR file.
 5. Add the following command to the ``start.sh`` or ``start.bat`` file:
     ```bash
-      java -jar databench-Flow-<version>.jar
+      java -jar DataCat-Flow-<version>.jar
    ```
    Replace `<version>` with the actual version number of the downloaded JAR file.
 6. Save the file and close the text editor.
@@ -48,7 +48,7 @@ automating routine database tasks such as backups, maintenance, and data process
       ```cmd
       start.bat
       ```
-9. Follow the on-screen instructions to complete the initial setup of Flow or take a look at the [wiki](https://github.com/JWeinelt/DataBench/wiki/Flow-Setup) for more detailed setup instructions.
+9. Follow the on-screen instructions to complete the initial setup of Flow or take a look at the [wiki](https://github.com/JWeinelt/DataCat/wiki/Flow-Setup) for more detailed setup instructions.
 
 
 ## 📤 Building from source

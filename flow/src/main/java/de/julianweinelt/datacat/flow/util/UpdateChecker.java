@@ -18,7 +18,7 @@ public class UpdateChecker {
     public void startDownload(String version) {
         File toSave = new File("tmp/flow-update.jar");
         if (toSave.getParentFile().mkdirs()) log.debug("Created directory {} for update download.", toSave.getParentFile().getAbsolutePath());
-        String url = "https://api.databench.julianweinelt.de/api/v1/download?part=FLOW&version=" + version;
+        String url = "https://api.data-cat.de/api/v1/download?part=FLOW&version=" + version;
         try {
             new DownloadUtil().downloadFile(url, toSave.getPath());
         } catch (IOException e) {
@@ -29,7 +29,7 @@ public class UpdateChecker {
     public void checkForUpdates(boolean giveNegativeFeedback) {
         log.info("Checking for updates...");
         try {
-            URL url = new URL("https://api.databench.julianweinelt.de/api/v1/versions");
+            URL url = new URL("https://api.data-cat.de/api/v1/versions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
 

@@ -30,7 +30,7 @@ public class FinishPage implements WizardPage {
 
         panel.add(Box.createVerticalStrut(30));
 
-        startCheck = new JCheckBox("Start DataBench now", true);
+        startCheck = new JCheckBox("Start DataCat now", true);
         startCheck.setAlignmentX(Component.CENTER_ALIGNMENT);
         startCheck.setBackground(panel.getBackground());
         panel.add(startCheck);

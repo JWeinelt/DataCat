@@ -34,7 +34,7 @@ public class Manifest {
         }
 
         public static Tool create(String version) {
-            return new Tool("DataBench", version);
+            return new Tool("DataCat", version);
         }
     }
 

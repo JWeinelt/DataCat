@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://databench.de/schema/plugin-configuration.json",
+  "$id": "https://api.data-cat.de/schema/plugin-configuration.json",
   "title": "PluginConfiguration",
-  "description": "Configuration schema for DataBench plugins (plugin.json)",
+  "description": "Configuration schema for DataCat plugins (plugin.json)",
   "type": "object",
   "additionalProperties": false,
 
@@ -54,7 +54,7 @@
 
     "minAPIVersion": {
       "type": "string",
-      "description": "Minimum required DataBench API version"
+      "description": "Minimum required DataCat API version"
     },
 
     "usesEncryption": {

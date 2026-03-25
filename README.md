@@ -1,6 +1,6 @@
-[![Build](https://github.com/JWeinelt/Databench/actions/workflows/maven.yml/badge.svg)](https://github.com/JWeinelt/Databench/actions/workflows/maven.yml) [![Crowdin](https://badges.crowdin.net/databench/localized.svg)](https://crowdin.com)
+[![Build](https://github.com/JWeinelt/DataCat/actions/workflows/maven.yml/badge.svg)](https://github.com/JWeinelt/DataCat/actions/workflows/maven.yml) [![Crowdin](https://badges.crowdin.net/datacat/localized.svg)](https://crowdin.com)
 
-[![Translate](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/translate/crowdin_64h.png?raw=true)](https://crowdin.com/project/databench)
+[![Translate](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/translate/crowdin_64h.png?raw=true)](https://crowdin.com/project/datacat)
 
 # 😺 DataCat
 
@@ -28,7 +28,7 @@ TODO Future features:
 -->
 
 ## ⚙️ How to Install
-**Download the latest release from the [GitHub Releases](https://github.com/JWeinelt/DataBench/releases) page.**
+**Download the latest release from the [GitHub Releases](https://github.com/JWeinelt/DataCat/releases) page.**
 
 Download the appropriate version for your operating system (Windows, macOS, or Linux) and follow the installation instructions provided.
 

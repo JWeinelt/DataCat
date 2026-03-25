@@ -67,7 +67,7 @@ public class SetupManager {
 
 
     public void startCLI(Terminal terminal) {
-        String databaseType = prompt(terminal, "Welcome to DataBench Flow! Before you can get started using this" +
+        String databaseType = prompt(terminal, "Welcome to DataCat Flow! Before you can get started using this" +
                 " tool, some information for running is needed. First of all, what's your database type?", "",
                 List.of("MySQL", "SQLServer", "MariaDB", "PostgreSQL, Derby"));
         clearScreen();

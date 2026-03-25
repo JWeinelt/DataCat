@@ -37,8 +37,8 @@ public class Reporter {
             String serverBase = (args.length > 2 && args[2].equalsIgnoreCase("--dev")) ? "http://localhost:7070/" :
                     "https://api.data-cat.de/";
 
-            Path file1 = new File(path, "databench.log").toPath();
-            Path fileDebug = new File(path, "databench-debug.log").toPath();
+            Path file1 = new File(path, "datacat.log").toPath();
+            Path fileDebug = new File(path, "datacat-debug.log").toPath();
 
             switch (action) {
                 case VIEW_LOGS -> {

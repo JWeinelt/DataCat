@@ -66,7 +66,7 @@ public class BenchUI {
         frame.setSize(1024, 600);
         frame.setLocationRelativeTo(null);
         if (Configuration.getConfiguration().isStoppedMaximized()) frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        frame.setName("DataBench");
+        frame.setName("DataCat");
         frame.setLayout(new BorderLayout());
 
         registerShortcuts(frame);
@@ -269,7 +269,7 @@ public class BenchUI {
 
         JLabel tip1 = new JLabel("• All database connections are organized in projects.");
         JLabel tip2 = new JLabel("• You can securely share them by exporting.");
-        JLabel tip3 = new JLabel("<html>• Check the <a href='https://github.com/JWeinelt/DataBench/wiki'>documentation</a> for SQL tips.</html>");
+        JLabel tip3 = new JLabel("<html>• Check the <a href='https://github.com/JWeinelt/DataCat/wiki'>documentation</a> for SQL tips.</html>");
 
         tipsPanel.add(tip1);
         tipsPanel.add(tip2);

@@ -1,6 +1,6 @@
-# 💾 DataBench Server
-This module contains the global server of DataBench. It's key features are:
-- Managing DataBench versions
+# 💾 DataCat Server
+This module contains the global server of DataCat. It's key features are:
+- Managing DataCat versions
 - Hosting update files for the launcher
 - Providing API endpoints for future features
 - Serving as a backend for cloud features
@@ -13,6 +13,6 @@ mvn clean package
 This will generate a JAR file in the `target` directory.
 
 > [!IMPORTANT]
-> The server is intended to be run on the official DataBench server infrastructure.
-> It should only be deployed and managed by the DataBench development team.
+> The server is intended to be run on the official DataCat server infrastructure.
+> It should only be deployed and managed by the DataCat development team.
 > You can use it, but you won't get any updates for your self-hosted version.

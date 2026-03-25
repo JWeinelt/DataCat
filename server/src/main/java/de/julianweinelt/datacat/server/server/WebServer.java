@@ -35,18 +35,18 @@ public class WebServer {
                         return;
                     }
                     try {
-                        DataBenchPart.valueOf(rawPart.toUpperCase());
+                        DataCatPart.valueOf(rawPart.toUpperCase());
                     } catch (IllegalArgumentException e) {
                         errorResponse(ctx, "Invalid parameter part", 400);
                         return;
                     }
-                    DataBenchPart part = DataBenchPart.valueOf(rawPart.toUpperCase());
+                    DataCatPart part = DataCatPart.valueOf(rawPart.toUpperCase());
                     if (rawVersion == null) {
                         rawVersion = VersionManager.instance().getLatestVersion(part);
                     }
 
                     ctx.contentType("application/octet-stream");
-                    ctx.header("Content-Disposition", "attachment; filename=\"dataBench-" + part + "-" + rawVersion + ".jar\"");
+                    ctx.header("Content-Disposition", "attachment; filename=\"datacat-" + part + "-" + rawVersion + ".jar\"");
 
                     File file = VersionManager.instance().getFile(rawVersion, part);
                     if (!file.exists()) {
@@ -63,13 +63,13 @@ public class WebServer {
                         return;
                     }
                     try {
-                        DataBenchPart.valueOf(rawPart.toUpperCase());
+                        DataCatPart.valueOf(rawPart.toUpperCase());
                     } catch (IllegalArgumentException e) {
                         errorResponse(ctx, "Invalid parameter part", 400);
                         return;
                     }
                     String rawVersion = ctx.pathParam("version");
-                    DataBenchPart part = DataBenchPart.valueOf(rawPart.toUpperCase());
+                    DataCatPart part = DataCatPart.valueOf(rawPart.toUpperCase());
                     JsonObject o = new JsonObject();
                     o.addProperty("success", true);
                     o.addProperty("changelog", VersionManager.instance().getChangeLog(rawVersion, part));
@@ -78,14 +78,14 @@ public class WebServer {
                     ctx.result(new Gson().toJson(VersionManager.instance().getLatestVersions()));
                 })
                 .post("/api/v1/latestversion", ctx -> {
-                    String key = ctx.header("DataBenchKey");
+                    String key = ctx.header("DataCatKey");
                     if (!KeyManager.checkKey(key)) {
                         errorResponse(ctx, "Invalid key", 403);
                         return;
                     }
                     JsonObject root = JsonParser.parseString(ctx.body()).getAsJsonObject();
                     try {
-                        DataBenchPart part = DataBenchPart.valueOf(root.get("part").getAsString().toUpperCase());
+                        DataCatPart part = DataCatPart.valueOf(root.get("part").getAsString().toUpperCase());
                         String version = root.get("version").getAsString();
 
                         VersionManager.instance().getLatestVersions().put(part, version);
@@ -98,9 +98,9 @@ public class WebServer {
                     }
                 })
                 .post("/api/v1/upload", ctx -> {
-                    DataBenchPart part = DataBenchPart.valueOf(ctx.queryParam("part").toUpperCase());
+                    DataCatPart part = DataCatPart.valueOf(ctx.queryParam("part").toUpperCase());
                     String version = ctx.queryParam("version");
-                    String key = ctx.header("DataBenchKey");
+                    String key = ctx.header("DataCatKey");
                     if (!KeyManager.checkKey(key)) {
                         ctx.status(403).result("Invalid key");
                         return;
@@ -123,9 +123,9 @@ public class WebServer {
                     ctx.result(o.toString());
                 })
                 .post("/api/v1/changelog", ctx -> {
-                    DataBenchPart part = DataBenchPart.valueOf(ctx.queryParam("part").toUpperCase());
+                    DataCatPart part = DataCatPart.valueOf(ctx.queryParam("part").toUpperCase());
                     String version = ctx.queryParam("version");
-                    String key = ctx.header("DataBenchKey");
+                    String key = ctx.header("DataCatKey");
                     if (!KeyManager.checkKey(key)) {
                         ctx.status(403).result("Invalid key");
                         return;

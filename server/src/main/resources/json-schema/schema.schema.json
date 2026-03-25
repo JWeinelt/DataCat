@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://api.databench.julianweinelt.de/dbx/schema.schema.json",
+  "$id": "https://api.data-cat.de/dbx/schema.schema.json",
   "type": "object",
   "required": ["database", "tables"],
   "additionalProperties": false,

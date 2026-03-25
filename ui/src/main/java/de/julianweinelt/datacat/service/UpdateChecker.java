@@ -32,7 +32,7 @@ public class UpdateChecker {
     public void openDownloadPopup(String version) {
         File toSave = new File("tmp/dbench-update.jar");
         if (toSave.getParentFile().mkdirs()) log.debug("Created directory {} for update download.", toSave.getParentFile().getAbsolutePath());
-        String url = "https://api.databench.julianweinelt.de/api/v1/download?part=EDITOR&version=" + version;
+        String url = "https://api.data-cat.de/api/v1/download?part=EDITOR&version=" + version;
         DownloadDialogProgress dialog = new DownloadDialogProgress(ui.getFrame(), url, toSave, "update", () ->
                 new NotificationPopup(
                 ui.getFrame(),
@@ -52,7 +52,7 @@ public class UpdateChecker {
     public void checkForUpdates(boolean giveNegativeFeedback) {
         log.info("Checking for updates...");
         try {
-            URL url = new URL("https://api.databench.julianweinelt.de/api/v1/versions");
+            URL url = new URL("https://api.data-cat.de/api/v1/versions");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 public class Launcher {
-    private final File appFile = new File("DataBench/DataBench.jar");
+    private final File appFile = new File("DataCat/DataCat.jar");
     private final File libraryFolder = new File("lib");
     private final File mssqlLib = new File(libraryFolder, "mssql-jdbc-auth.dll");
 
@@ -27,12 +27,12 @@ public class Launcher {
         // If first start
         if (!storage.getConfigFile().exists()) {
             if (libraryFolder.mkdirs()) log.debug("lib folder created successfully");
-            if (appFile.getParentFile().mkdirs()) log.debug("DataBench folder created successfully");
+            if (appFile.getParentFile().mkdirs()) log.debug("DataCat folder created successfully");
             try {
-                File tmp1 = new File("DataBench.jar");
+                File tmp1 = new File("DataCat.jar");
                 File tmp2 = new File("mssql-jdbc-auth.dll");
                 Files.copy(tmp1.toPath(), appFile.toPath());
-                if (tmp1.delete()) log.debug("DataBench.jar deleted successfully");
+                if (tmp1.delete()) log.debug("DataCat.jar deleted successfully");
                 Files.copy(tmp2.toPath(), mssqlLib.toPath());
                 if (tmp2.delete()) log.debug("mssql-jdbc-auth.dll deleted successfully");
             } catch (IOException e) {

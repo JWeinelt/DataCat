@@ -1,4 +1,4 @@
-# 🚀 DataBench Roadmap
+# 🚀 DataCat Roadmap
 
 > Goal: Creating an enterprise-ready database management and analysis tool
 
@@ -6,7 +6,7 @@
 
 ## 📌 Vision
 
-**What should DataBench become in the long term?**
+**What should DataCat become in the long term?**
 
 * enterprise-ready database tool
 * Focus on performance and stability

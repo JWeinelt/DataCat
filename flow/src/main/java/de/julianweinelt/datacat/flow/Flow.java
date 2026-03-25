@@ -61,7 +61,7 @@ public class Flow {
         log.info("Checking for updates...");
         new UpdateChecker().checkForUpdates(true);
         log.info("Welcome!");
-        log.info("Starting DataBench Flow...");
+        log.info("Starting DataCat Flow...");
         log.info("Loading drivers from disk...");
         try {
             driverManagerService.preloadDrivers();

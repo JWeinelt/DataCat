@@ -25,7 +25,7 @@ import java.net.URI;
 import static de.julianweinelt.datacat.dbx.util.LanguageManager.translate;
 
 /**
- * The SystemPlugin is a core plugin representing the system module of the DataBench DBX plugin framework.
+ * The SystemPlugin is a core plugin representing the system module of the DataCat DBX plugin framework.
  * It is used to register system-level events.
  * Unloading it may lead to unexpected behavior.<br>
  * <b>DO NOT USE THIS PLUGIN INSTANCE FOR ANY REGISTRATIONS!!!</b>
@@ -54,7 +54,7 @@ public final class SystemPlugin extends DbxPlugin {
         getRegistry().registerListener(this, this);
         getRegistry().registerEvents(this, "UIMenuBarItemClickEvent");
         getRegistry().registerEvents(this, "LanguageChangeEvent");
-        getRegistry().registerEvents(this, "DataBenchShutdownEvent");
+        getRegistry().registerEvents(this, "DataCatShutdownEvent");
 
 
         ShortcutManager m = ShortcutManager.instance();
@@ -125,7 +125,7 @@ public final class SystemPlugin extends DbxPlugin {
                 .child(new MenuItem(translate("menu.cat.help.license"), "help_license"))
                 .child(new MenuItem(translate("menu.cat.help.bugs"), "help_bug_report").action(() -> {
                     try {
-                        Desktop.getDesktop().browse(URI.create("https://github.com/JWeinelt/databench/issues/new/choose"));
+                        Desktop.getDesktop().browse(URI.create("https://github.com/JWeinelt/DataCat/issues/new/choose"));
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }

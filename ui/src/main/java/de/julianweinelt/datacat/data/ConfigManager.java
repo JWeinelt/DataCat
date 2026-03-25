@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 
 @Slf4j
 public class ConfigManager {
-    private final File configFile = new File("databench.config");
+    private final File configFile = new File("datacat.config");
 
     @Getter
     private Configuration configuration = new Configuration();

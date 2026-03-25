@@ -94,7 +94,7 @@ public class DataCat {
     }
 
     public DataCat() {
-        log.info("Initializing DataBench...");
+        log.info("Initializing DataCat...");
         if (devMode) log.info("############### DEV MODE ENABLED #############");
         Properties props = new Properties();
         try (InputStream is = DataCat.class
@@ -108,7 +108,7 @@ public class DataCat {
         }
 
         String version = props.getProperty("app.version");
-        log.info("Starting DataBench v{}", version);
+        log.info("Starting DataCat v{}", version);
         DataCat.version = version;
         log.info("Starting event queue...");
         api = new DbxAPI(new File("api"), new SystemPlugin());
@@ -122,14 +122,14 @@ public class DataCat {
         try {
             driverManagerService.preloadDrivers();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "DataBench failed to load some Database drivers.\n\n" +
+            JOptionPane.showMessageDialog(null, "DataCat failed to load some Database drivers.\n\n" +
                     "Message reported by system: \n" + e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
         }
 
-        log.info("Starting DataBench");
+        log.info("Starting DataCat");
         log.info("Preparing to load configurations...");
 
-        if (!new File("databench.config").exists()) {
+        if (!new File("datacat.config").exists()) {
             prepare();
             return;
         }
@@ -138,7 +138,7 @@ public class DataCat {
         log.info("Loading configuration...");
         configManager.loadConfig();
         configManager.getConfiguration().initHomeDirectories();
-        log.info("Loaded DataBench pre-config with installation id: {}", configManager.getConfiguration().getInstallationID());
+        log.info("Loaded DataCat pre-config with installation id: {}", configManager.getConfiguration().getInstallationID());
 
         if (configManager.getConfiguration().isSendAnonymousData()) StatisticUtil.sendStartup();
 
@@ -203,8 +203,8 @@ public class DataCat {
         startSocketListener();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("Shutting down DataBench...");
-            Registry.instance().callEvent(new Event("DataBenchShutdownEvent"));
+            log.info("Shutting down DataCat...");
+            Registry.instance().callEvent(new Event("DataCatShutdownEvent"));
             log.info("Disabling plugin service...");
             pluginLoader.unloadAll();
             log.info("Plugins unloaded.");
@@ -213,7 +213,7 @@ public class DataCat {
 
             if (shouldUpdate) {
                 ProcessBuilder pb = new ProcessBuilder(
-                        "DataBench.exe",
+                        "DataCat.exe",
                         "--update"
                 );
                 try {
@@ -276,7 +276,7 @@ public class DataCat {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel welcomeLabel = new JLabel("Welcome to DataBench! Please enter a strong encryption password to continue:");
+        JLabel welcomeLabel = new JLabel("Welcome to DataCat! Please enter a strong encryption password to continue:");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;

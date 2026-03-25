@@ -1,13 +1,13 @@
 package de.julianweinelt.datacat.server.server;
 
-public enum DataBenchPart {
+public enum DataCatPart {
     EDITOR("ui"),
     LAUNCHER("launcher"),
     FLOW("flow");
 
     public final String folder;
 
-    DataBenchPart(String folder) {
+    DataCatPart(String folder) {
         this.folder = folder;
     }
 }

@@ -3,7 +3,7 @@ package de.julianweinelt.datacat.server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import de.julianweinelt.datacat.server.server.DataBenchPart;
+import de.julianweinelt.datacat.server.server.DataCatPart;
 import de.julianweinelt.datacat.server.server.Version;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,26 +21,26 @@ public class VersionManager {
     private final File latestVersionFile = new File("latest.json");
     private final List<Version> versions = new ArrayList<>();
     @Getter
-    private final HashMap<DataBenchPart, String> latestVersions = new HashMap<>();
+    private final HashMap<DataCatPart, String> latestVersions = new HashMap<>();
 
     public static VersionManager instance() {
         return Server.getInstance().getVersionManager();
     }
 
-    public String getLatestVersion(DataBenchPart part) {
+    public String getLatestVersion(DataCatPart part) {
         return latestVersions.getOrDefault(part, "!");
     }
 
-    public File getFile(String version, DataBenchPart part) {
+    public File getFile(String version, DataCatPart part) {
         File versionFolder = new File(new File("files", part.folder), version);
         return new File(versionFolder, part.folder + ".jar");
     }
 
-    public File getChangelogFile(String version, DataBenchPart part) {
+    public File getChangelogFile(String version, DataCatPart part) {
         File versionFolder = new File(new File("files", part.folder), version);
         return new File(versionFolder, "changelog.md");
     }
-    public String getChangeLog(String version, DataBenchPart part) {
+    public String getChangeLog(String version, DataCatPart part) {
         File versionFolder = new File(new File("files", part.folder), version);
         File file = new File(versionFolder, "changelog.md");
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -89,7 +89,7 @@ public class VersionManager {
             return;
         }
         try (BufferedReader br = new BufferedReader(new FileReader(latestVersionFile))) {
-            Type type = new TypeToken<HashMap<DataBenchPart, String>>(){}.getType();
+            Type type = new TypeToken<HashMap<DataCatPart, String>>(){}.getType();
             latestVersions.putAll(GSON.fromJson(br, type));
         } catch (IOException e) {
             log.error(e.getMessage(), e);

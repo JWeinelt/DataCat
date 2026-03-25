@@ -27,7 +27,7 @@ public class WizardFrame extends JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icon.png"));
         setIconImage(icon);
 
-        setTitle("DataBench Setup");
+        setTitle("DataCat Setup");
         setSize(820, 520);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -17,7 +17,7 @@ public class Configuration {
 
 
     @Getter(AccessLevel.NONE)
-    private String INFO = "WARNING: DO NOT CHANGE THIS FILE MANUALLY!!!! USE THE DATABENCH EDITOR!";
+    private String INFO = "WARNING: DO NOT CHANGE THIS FILE MANUALLY!!!! USE THE DataCat EDITOR!";
 
     private boolean ignoreSafeMode = false;
     private String dbHost = "localhost";

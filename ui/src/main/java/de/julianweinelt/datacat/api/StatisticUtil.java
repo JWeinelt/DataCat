@@ -24,7 +24,7 @@ public class StatisticUtil {
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.databench.julianweinelt.de/metrics/login"))
+                    .uri(URI.create("https://api.data-cat.de/metrics/login"))
                     .POST(HttpRequest.BodyPublishers.ofString(o.toString()))
                     .build();
 
