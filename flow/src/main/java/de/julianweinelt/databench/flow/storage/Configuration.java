@@ -11,6 +11,11 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Configuration {
+    public static Configuration instance() {
+        return LocalStorage.instance().getConfig();
+    }
+
+
     @Getter(AccessLevel.NONE)
     private String INFO = "WARNING: DO NOT CHANGE THIS FILE MANUALLY!!!! USE THE DATABENCH EDITOR!";
 
@@ -19,6 +24,7 @@ public class Configuration {
     private int dbPort = 3306;
     private String dbUser = "root";
     private String dbPassword = "";
+    private String dbType = "";
 
     private final List<String> jvmArgs = new ArrayList<>();
 
