@@ -9,6 +9,7 @@ import de.julianweinelt.databench.flow.flow.FlowSocketServer;
 import de.julianweinelt.databench.flow.flow.auth.UserManager;
 import de.julianweinelt.databench.flow.job.JobAgent;
 import de.julianweinelt.databench.flow.setup.SetupManager;
+import de.julianweinelt.databench.flow.storage.DatabaseProvider;
 import de.julianweinelt.databench.flow.storage.LocalStorage;
 import de.julianweinelt.databench.flow.util.CryptoUtil;
 import de.julianweinelt.databench.flow.util.JWTUtil;
@@ -41,6 +42,9 @@ public class Flow {
     private UserManager userManager;
     @Getter
     private CryptoUtil cryptoUtil;
+
+    @Getter
+    private DatabaseProvider databaseProvider;
 
     public static void main(String[] args) {
         instance = new Flow();
@@ -84,12 +88,19 @@ public class Flow {
 
         server = new FlowServer();
         server.start();
+        databaseProvider = new DatabaseProvider();
+        databaseProvider.start();
 
         new Thread(() -> new FlowCLI().start()).start();
     }
 
     public void stop() {
-
+        server.stop();
+        try {
+            socketServer.stop();
+        } catch (InterruptedException e) {
+            log.error("Failed to stop socket server: {}", e.getMessage(), e);
+        }
     }
 
     public void restart() {
