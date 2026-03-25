@@ -1,0 +1,100 @@
+package de.julianweinelt.datacat.dbx.api;
+
+import de.julianweinelt.datacat.dbx.api.plugins.DbxPlugin;
+import de.julianweinelt.datacat.dbx.api.ui.UIService;
+import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
+import de.julianweinelt.datacat.dbx.database.providers.DBMetaMSSQL;
+import de.julianweinelt.datacat.dbx.database.providers.DBMetaMariaDB;
+import de.julianweinelt.datacat.dbx.database.providers.DBMetaMySQL;
+import de.julianweinelt.datacat.dbx.database.providers.db.DBMSSQL;
+import de.julianweinelt.datacat.dbx.database.providers.db.DBMariaDB;
+import de.julianweinelt.datacat.dbx.database.providers.db.DBMySQL;
+import de.julianweinelt.datacat.dbx.util.DatabaseType;
+import de.julianweinelt.datacat.dbx.util.HomeDirectories;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
+public class DbxAPI {
+    private final File apiFolder;
+    private static DbxAPI instance;
+
+    private final List<DatabaseType> types = new ArrayList<>();
+
+    @Getter
+    private final Registry registry;
+    @Getter
+    private final UIService uiService;
+    @Getter
+    private final DatabaseRegistry dbRegistry;
+    @Getter
+    private final HomeDirectories homeDirectories;
+    @Getter
+    private final DbxPlugin systemPlugin;
+
+    public DbxAPI(File apiFolder, DbxPlugin systemPlugin) {
+        instance = this;
+        this.systemPlugin = systemPlugin;
+        this.apiFolder = apiFolder;
+        if (apiFolder.mkdirs()) log.debug("API folder created");
+        registry = new Registry(this);
+        dbRegistry = new DatabaseRegistry();
+        uiService = new UIService();
+        homeDirectories = new HomeDirectories();
+        init(systemPlugin);
+    }
+
+    public static DbxAPI instance() {
+        return instance;
+    }
+
+    private void init(DbxPlugin systemPlugin) {
+        if (new File(apiFolder, "plugins").mkdirs()) log.debug("API plugins folder created");
+        if (new File(apiFolder, "drivers").mkdirs()) log.debug("API drivers folder created");
+        types.add(new DatabaseType("MySQL", "jdbc:mysql://${server}/${database}" +
+                "?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=" +
+                "UTC&autoReconnect=true", "Oracle"));
+
+
+        registry.registerEvents(systemPlugin, "UIMenuBarRevalidateEvent");
+
+        log.info("Registering database handlers...");
+        DatabaseRegistry.instance().registerMapping("mysql", DBMySQL::new, new DBMetaMySQL());
+        DatabaseRegistry.instance().registerMapping("mssql", DBMSSQL::new, new DBMetaMSSQL());
+        DatabaseRegistry.instance().registerMapping("mariadb", DBMariaDB::new, new DBMetaMariaDB());
+    }
+
+    // API Methods
+    public void registerDatabaseType(String name, String jdbcLink, String vendor) {
+        types.add(new DatabaseType(name, jdbcLink, vendor));
+    }
+    public boolean typeRegistered(String name) {
+        for (DatabaseType type : types) {
+            if (type.name().equals(name)) return true;
+        }
+        return false;
+    }
+
+    public Optional<DatabaseType> getType(String name) {
+        for (DatabaseType type : types) {
+            if (type.name().equals(name)) return Optional.of(type);
+        }
+        return Optional.empty();
+    }
+
+    // Getters
+    public static Registry registry() {
+        return instance().registry;
+    }
+    public static File pluginsFolder() {
+        return new File(instance.apiFolder, "plugins");
+    }
+    public static File driversFolder() {
+        return new File(instance.apiFolder, "drivers");
+    }
+}
