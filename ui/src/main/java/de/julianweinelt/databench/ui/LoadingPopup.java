@@ -4,8 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoadingPopup {
-
-    private JDialog dialog;
+    private final JDialog dialog;
 
     public LoadingPopup(JFrame parent, String message) {
         dialog = new JDialog(parent, true);

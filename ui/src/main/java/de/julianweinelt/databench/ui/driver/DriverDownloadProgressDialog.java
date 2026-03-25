@@ -27,7 +27,7 @@ public class DriverDownloadProgressDialog extends JDialog {
                                         String database, String version) {
         super(parent, translate("dialog.driver.download.progress.title"), ModalityType.APPLICATION_MODAL);
         File saveFile = new File(saveFolder, download.fileName());
-        saveFolder.mkdirs();
+        if (saveFolder.mkdirs()) log.debug("Created save directory: {}", saveFolder.getPath());
         setSize(420, 120);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout(10, 10));

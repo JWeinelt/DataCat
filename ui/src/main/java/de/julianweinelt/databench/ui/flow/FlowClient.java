@@ -6,11 +6,6 @@ import de.julianweinelt.databench.api.DConnection;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -25,7 +20,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 public class FlowClient {
-    private String baseURL = "http://localhost:47387/api/v1/";
+    private String baseURL = "http://localhost:47387/api/v1/"; //TODO: Make dynamic depending on connection
     @Getter
     private String token;
 

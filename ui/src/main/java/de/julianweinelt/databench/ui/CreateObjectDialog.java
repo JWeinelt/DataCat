@@ -1,11 +1,13 @@
 package de.julianweinelt.databench.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+@Getter
 public class CreateObjectDialog extends JDialog {
-
     public enum CreateType {
         SCHEMA("Schema"),
         TABLE("Table"),
@@ -86,7 +88,4 @@ public class CreateObjectDialog extends JDialog {
         );
     }
 
-    public CreateType getSelectedType() {
-        return selectedType;
-    }
 }

@@ -3,9 +3,9 @@ package de.julianweinelt.databench.ui;
 import de.julianweinelt.databench.data.ConfigManager;
 import de.julianweinelt.databench.data.Configuration;
 import de.julianweinelt.databench.dbx.api.ui.SettingsPanel;
+import de.julianweinelt.databench.dbx.api.ui.ShortcutAction;
 import de.julianweinelt.databench.dbx.api.ui.ShortcutManager;
 import de.julianweinelt.databench.dbx.api.ui.UIService;
-import de.julianweinelt.databench.dbx.api.ui.ShortcutAction;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;

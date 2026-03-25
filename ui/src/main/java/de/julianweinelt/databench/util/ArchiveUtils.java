@@ -1,5 +1,6 @@
 package de.julianweinelt.databench.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
@@ -9,19 +10,20 @@ import java.nio.file.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Slf4j
 public class ArchiveUtils {
     public static void unzip(File zipFile, File destDir) throws IOException {
         if (!destDir.exists()) {
-            destDir.mkdirs();
+            if (destDir.mkdirs()) log.debug("Created destination directory: {}", destDir.getPath());
         }
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile))) {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
                 File outFile = new File(destDir, entry.getName());
                 if (entry.isDirectory()) {
-                    outFile.mkdirs();
+                    if (outFile.mkdirs()) log.debug("Created directory: {}", outFile.getPath());
                 } else {
-                    outFile.getParentFile().mkdirs();
+                    if (outFile.getParentFile().mkdirs()) log.debug("Created parent directory: {}", outFile.getParentFile().getPath());
                     try (FileOutputStream fos = new FileOutputStream(outFile)) {
                         byte[] buffer = new byte[4096];
                         int len;
@@ -36,7 +38,7 @@ public class ArchiveUtils {
 
     public static void untarGz(File tarGzFile, File destDir) throws IOException {
         if (!destDir.exists()) {
-            destDir.mkdirs();
+            if (destDir.mkdirs()) log.debug("Created destination directory: {}", destDir.getPath());
         }
 
         try (FileInputStream fis = new FileInputStream(tarGzFile);
@@ -45,12 +47,12 @@ public class ArchiveUtils {
              TarArchiveInputStream tis = new TarArchiveInputStream(gzis)) {
 
             TarArchiveEntry entry;
-            while ((entry = tis.getNextTarEntry()) != null) {
+            while ((entry = tis.getNextEntry()) != null) {
                 File outFile = new File(destDir, entry.getName());
                 if (entry.isDirectory()) {
-                    outFile.mkdirs();
+                    if (outFile.mkdirs()) log.debug("Created directory: {}", outFile.getPath());
                 } else {
-                    outFile.getParentFile().mkdirs();
+                    if (outFile.getParentFile().mkdirs()) log.debug("Created parent directory: {}", outFile.getParentFile().getPath());
                     try (FileOutputStream fos = new FileOutputStream(outFile)) {
                         byte[] buffer = new byte[4096];
                         int len;

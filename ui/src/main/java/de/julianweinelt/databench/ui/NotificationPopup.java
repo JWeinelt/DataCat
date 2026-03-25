@@ -1,5 +1,7 @@
 package de.julianweinelt.databench.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,6 +11,7 @@ import java.awt.geom.RoundRectangle2D;
 
 public class NotificationPopup extends JWindow {
     private Timer autoCloseTimer;
+    @Getter
     private final NotificationType type;
 
     public NotificationPopup(

@@ -72,7 +72,7 @@ public class ThemeSwitcher {
             FlatAnimatedLafChange.hideSnapshotWithAnimation();
             DataBench.getInstance().getUi().updateProjectCards();
         } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+            log.error("Unsupported LookAndFeel: {}", e.getMessage(), e);
         }
     }
 }
