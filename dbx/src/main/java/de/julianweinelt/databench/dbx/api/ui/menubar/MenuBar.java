@@ -29,6 +29,7 @@ public class MenuBar {
     public MenuBar(JFrame frame, DbxPlugin plugin) {
         this.frame = frame;
         bar = new JMenuBar();
+        frame.setJMenuBar(bar);
         log.info("Creating menu bar");
         Registry.instance().registerListener(this, plugin);
     }
@@ -117,7 +118,7 @@ public class MenuBar {
     @Subscribe(value = "UIMenuBarRevalidateEvent")
     public void revalidate(Event event) {
         log.info("Got signal to revalidate menu bar");
-        updateAll(event.get("shutdown").asBoolean());
+        updateAll(!event.get("shutdown").asBoolean());
     }
 
     @Getter
