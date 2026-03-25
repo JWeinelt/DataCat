@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.julianweinelt.databench</groupId>
-    <artifactId>DataBench</artifactId>
-    <version>1.0.0</version>
+    <artifactId>DataCat</artifactId>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>ui</module>
@@ -24,12 +24,10 @@
     </properties>
 
 
-
     <distributionManagement>
         <repository>
-            <id>unifiedvision-releases</id>
-            <url>https://repo.codeblocksmc.de/public</url>
-            <name>Maven Repository</name>
+            <id>codeblocksmc-release</id>
+            <url>https://repo.codeblocksmc.com/repository/codeblocksmc-release/</url>
         </repository>
     </distributionManagement>
 
