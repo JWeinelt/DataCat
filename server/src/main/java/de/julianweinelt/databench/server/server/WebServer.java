@@ -161,6 +161,24 @@ public class WebServer {
                         ctx.result(is);
                     }
                 })
+                .get("/api/v1/news/latest/html", ctx -> {
+                    Path path = Path.of("news/latest/file.html");
+                    if (Files.exists(path)) {
+                        ctx.contentType("text/html");
+                        ctx.result(Files.newInputStream(path));
+                    } else {
+                        ctx.status(404);
+                    }
+                })
+                .get("/api/v1/news/latest/meta", ctx -> {
+                    Path path = Path.of("news/latest/meta.json");
+                    if (Files.exists(path)) {
+                        ctx.contentType("application/json");
+                        ctx.result(Files.newInputStream(path));
+                    } else {
+                        ctx.status(404);
+                    }
+                })
                 .start(7000);
     }
 
