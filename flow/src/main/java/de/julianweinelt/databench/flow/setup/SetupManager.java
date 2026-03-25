@@ -7,6 +7,7 @@ import de.julianweinelt.databench.dbx.api.drivers.DriverManagerService;
 import de.julianweinelt.databench.dbx.database.DatabaseMetaData;
 import de.julianweinelt.databench.dbx.database.DatabaseRegistry;
 import de.julianweinelt.databench.flow.Flow;
+import de.julianweinelt.databench.flow.storage.Configuration;
 import de.julianweinelt.databench.flow.storage.DatabaseChecker;
 import de.julianweinelt.databench.flow.storage.LocalStorage;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +88,7 @@ public class SetupManager {
         } else {
             log.info("Driver for {} is already installed!", databaseType);
         }
+        Configuration.instance().setDbType(databaseType.toLowerCase());
         clearScreen();
         String userName = prompt(terminal, "You have to create a service account on your server. Please enter the username.",
                 "", List.of());
