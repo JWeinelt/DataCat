@@ -76,9 +76,10 @@ public final class SystemPlugin extends DbxPlugin {
                     JFileChooser fileChooser = new JFileChooser();
                     fileChooser.setDialogTitle("Open File");
                     fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(
-                            "DataBench Project Files (*.dbproj), SQL Files (*.sql)", "dbproj", "sql"));
+                            "DataCat Project Files (*.dbproj), SQL Files (*.sql), DBX Archives (*.dbx)", "dbproj", "sql", "dbx"));
                     fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("SQL Files (*.sql)", "sql"));
-                    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("DataBench Project Files (*.dbproj)", "dbproj"));
+                    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("DataCat Project Files (*.dbproj)", "dbproj"));
+                    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("DBX Backup Archives (*.dbx)", "dbx"));
                     fileChooser.setAcceptAllFileFilterUsed(true);
                     fileChooser.setDialogType(JFileChooser.FILES_ONLY);
                     int returnValue = fileChooser.showOpenDialog(getMainFrame());
