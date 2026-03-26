@@ -11,23 +11,21 @@
 [![GooglePlay](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/available/google-play_64h.png)]()
 [![MSStore]()]()-->
 
-# 😺 DataCat
-
-DataCat is an open-source software tool designed to help users manage and analyze their databases, no matter which engine.
+DataCat is an open-source software tool designed to help users manage and analyze their databases, no matter which engine. It is optimized for admins, power-users and beginners as well.
 
 ## 🔒 Features
 - 😊 User-friendly interface for managing databases
 - 🚀 Integrated SQL editor with **syntax highlighting** and **auto-completion**
 - 🏣 Support for multiple database connections
-- 🗯 Support for different database types (MySQL, MariaDB, SQL Server, PostgreSQL built-in, more are available through plugins)
+- 🗯 Support for different database types (MySQL, MariaDB, SQL Server, built-in, more are available through plugins)
 - 🏛️ Native Windows authentication support for SQL Server
-- 🌜 Dark Mode support for comfortable coding
-- 📤 Export query results to CSV/MS Excel format
+- 🌜 Full theme support to style DataCat the way you like
+- 📤 Export query results to .csv / MS Excel format (.xlsx)
 - ⚙️ Lightweight and easy to install
-- 🔒 Secure and encrypted database connection details to share with team members
+- 🔒 Database connection details are securely stored on your system using an encryption password
 - 🐳 Advanced plugin system to integrate into events, change ui elements, implement new database types, add themes and more
-- 📫 Data import/export functionality (WIP; Proof of concept)
-- 🌊 Flow: An SQL Agent alternative for every database engine
+- 📫 Data import/export functionality (Beta)
+- 🌊 Flow: An SQL Agent alternative for every database engine (Beta)
 
 <!-- 
 TODO Future features:
@@ -37,10 +35,21 @@ TODO Future features:
 -->
 
 ## ⚙️ How to Install
-**Download the latest release from the [GitHub Releases](https://github.com/JWeinelt/DataCat/releases) page.**
+### Using GitHub
+1. Download the latest version from [GitHub](https://github.com/JWeinelt/DataCat/releases).
+     **Important:** It may be more complex to install/update DataCat manually.
+2. Follow the installation insturctions
 
-Download the appropriate version for your operating system (Windows, macOS, or Linux) and follow the installation instructions provided.
+<!--### Microsoft Store (Coming soon)
+1. Search for *DataCat* in Microsoft Store.
+2. Select the app and click "install".
 
+### Linux (APT)
+You can also install DataCat using **apt**. To do this, we've provided an automated installation script which does everything for you:
+```bash
+curl -fsSL http://repo.codeblocksmc.com/repository/datacat/install.sh | sudo bash
+```
+-->
 ## 🚀 Getting Started
 1. Launch DataCat after installation.
 2. Set up an encryption password for securing your database connections.
