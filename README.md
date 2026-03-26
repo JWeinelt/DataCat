@@ -1,6 +1,15 @@
-[![Build](https://github.com/JWeinelt/DataCat/actions/workflows/maven.yml/badge.svg)](https://github.com/JWeinelt/DataCat/actions/workflows/maven.yml) [![Crowdin](https://badges.crowdin.net/datacat/localized.svg)](https://crowdin.com)
+[![Build](https://github.com/JWeinelt/DataCat/actions/workflows/maven.yml/badge.svg)](https://github.com/JWeinelt/DataCat/actions/workflows/maven.yml) [![Tag](https://img.shields.io/github/v/tag/JWeinelt/DataCat)](https://github.com/Jweinelt/DataCat) [![Stars](https://img.shields.io/github/stars/JWeinelt/DataCat?style=flat)]() [![License](https://img.shields.io/github/license/JWeinelt/DataCat
+)]()
 
-[![Translate](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/translate/crowdin_64h.png?raw=true)](https://crowdin.com/project/datacat)
+
+[![Translate](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/translate/weblate_64h.png?raw=true)](https://weblate.data-cat.de)
+[![Docs](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/documentation/readthedocs_64h.png)](https://docs.data-cat.de)
+[![Issues](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/documentation/issues_64h.png)](https://github.com/JWeinelt/DataCat/issues)
+[![PRs](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/documentation/pull-requests_64h.png)](https://github.com/JWeinelt/DataCat/pulls)
+<!--[![Gradle](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/available/gradle-plugin-portal_64h.png)]()
+[![Maven](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/available/maven-central_64h.png)]()
+[![GooglePlay](https://github.com/intergrav/devins-badges/blob/v3/assets/cozy/available/google-play_64h.png)]()
+[![MSStore]()]()-->
 
 # 😺 DataCat
 
