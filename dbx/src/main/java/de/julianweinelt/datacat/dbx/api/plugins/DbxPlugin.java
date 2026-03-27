@@ -42,23 +42,33 @@ public abstract class DbxPlugin {
 
     private final HashMap<String, HashMap<String, String>> languageData = new HashMap<>();
 
-    public void setLangData(HashMap<String, HashMap<String, String>> languageData) {
+    protected void setLangData(HashMap<String, HashMap<String, String>> languageData) {
         if (languageData.isEmpty()) log.debug("Language data is empty.");
         this.languageData.clear();
         this.languageData.putAll(languageData);
     }
 
     /**
-     * Returns the data folder of the plugin. Typically, the path is ~/data/[ModuleName].
+     * Get the data folder of the plugin. Typically, the path is ~/data/[ModuleName].
      * @return {@link File} object of the data folder
      */
-    public File getDataFolder() {
+    protected File getDataFolder() {
         return new File(DbxAPI.pluginsFolder(), "data/" + name);
     }
-    public Registry getRegistry() {
+
+    /**
+     * Get the registry of the system
+     * @return A {@link Registry} object representing the API registry
+     */
+    protected Registry getRegistry() {
         return Registry.instance();
     }
-    public JFrame getMainFrame() {
+
+    /**
+     * Get the main frame of the editor window
+     * @return The {@link JFrame} object of the editor window
+     */
+    protected JFrame getMainFrame() {
         return Registry.instance().getMainFrame();
     }
 
@@ -82,16 +92,34 @@ public abstract class DbxPlugin {
      */
     public abstract void onDefineEvents();
 
+    /**
+     * Get the logger implementing class to log data to console/debug protocol
+     * @return A {@link Logger} instance
+     */
     protected Logger getLogger() {
         return LoggerFactory.getLogger(this.getClass());
     }
 
+    /**
+     * Defines if this plugin is required on both client (editor) and server (flow).<br>
+     * Example how it is handled:<br>
+     * <ul>
+     *     <li>Server: <code>true</code> + Client: <code>true</code> => Plugin can be used</li>
+     *     <li>Server: <code>false</code> + Client: <code>true</code> => Plugin cannot be used</li>
+     *     <li>Server: <code>true</code> + Client: <code>false</code> => Client will be forced to download plugin</li>
+     * </ul>
+     * @return
+     */
     public boolean requiredOnClientAndServer() {
         return false;
     }
 
-
-
+    /**
+     * Register a theme that is located in the classpath in resources folder.
+     * @param name Name of theme, the file <b>must</b> have the same name under
+     *             <code>src/main/resources/[name].theme.json</code>
+     * @deprecated In favor of the new yarn theme system since v1.0.1-beta.1
+     */
     protected void registerTheme(String name) {
         String filePath = "/themes/" + name + ".theme.json";
         try {
@@ -103,11 +131,21 @@ public abstract class DbxPlugin {
                     name, getName(), String.join(",", getAuthors()), filePath);
         }
     }
+
+    /**
+     * Register a theme using an internal name and a {@link BasicLookAndFeel} instance
+     * @param name The internal name of the theme. Should only be lower case letters and underscores.
+     * @param laf An instance of {@link BasicLookAndFeel}
+     * @deprecated In favor of the new yarn theme system since v1.0.1-beta.1
+     */
     protected void registerTheme(String name, BasicLookAndFeel laf) {
-        Theme theme = new Theme(this, name, "", laf);
+        Theme theme = new Theme(this, name, laf);
         getRegistry().registerTheme(theme);
     }
 
+    /**
+     * Loads themes from classpath, reading the content of <code>src/main/resources/themes/themes.json</code>
+     */
     protected void preloadThemes() {
         try {
             JsonArray definedThemes = JsonParser.parseString(readContent("/themes/themes.json")).getAsJsonArray();

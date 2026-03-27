@@ -1,5 +1,6 @@
 package de.julianweinelt.datacat.dbx.database;
 
+import de.julianweinelt.datacat.dbx.api.exceptions.DatabaseSchemaNotFoundException;
 import de.julianweinelt.datacat.dbx.backup.ColumnDefinition;
 import de.julianweinelt.datacat.dbx.backup.IndexDefinition;
 import de.julianweinelt.datacat.dbx.backup.TableDefinition;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.*;
 import java.util.*;
 
+@SuppressWarnings("SqlDialectInspection")
 @Slf4j
 @Getter
 public abstract class ADatabase {
@@ -18,7 +20,7 @@ public abstract class ADatabase {
     private final String password;
 
     public Connection conn;
-    private DatabaseMetaData metaData;
+    private final DatabaseMetaData metaData;
 
 
     protected ADatabase(String host, int port, String username, String password) {
@@ -37,10 +39,19 @@ public abstract class ADatabase {
 
     // CONNECTION
 
+    /**
+     * Connect to the database using the default parameters of this database type
+     * @return <code>true</code> if connection was successful, otherwise <code>false</code>
+     */
     public boolean connect() {
         return connect(metaData.defaultParameters());
     }
 
+    /**
+     * Connect to the database using custom parameters
+     * @param builder A {@link ParameterBuilder} object containing all parameters
+     * @return <code>true</code> if connection was successful, otherwise <code>false</code>
+     */
     public boolean connect(ParameterBuilder builder) {
         String DB_NAME = metaData.jdbcURL().replace("${server}", host + ":" + port);
         DB_NAME = DB_NAME.replace("${database}", "")
@@ -56,6 +67,9 @@ public abstract class ADatabase {
         }
     }
 
+    /**
+     * Disconnect from database
+     */
     public void disconnect() {
         try {
             if (conn != null) {
@@ -65,8 +79,20 @@ public abstract class ADatabase {
             log.error(e.getMessage());
         }
     }
+
+    /**
+     * Set the database connecting to streaming mode.
+     * @param streaming streaming mode
+     * @implNote Some databases don't support streaming.
+     */
     public abstract void setStreaming(boolean streaming);
 
+    /**
+     * Execute the <code>USE [dbname];</code> statement on the database connection.
+     * @param database The name of the database to use
+     * @throws IllegalArgumentException if the database name is invalid
+     * @throws DatabaseSchemaNotFoundException if the database doesn't exist
+     */
     public void useDatabase(String database) {
         try {
             if (!database.matches("[a-zA-Z0-9_]+")) {
@@ -77,13 +103,25 @@ public abstract class ADatabase {
             log.debug("Using database '{}'", database);
         } catch (SQLException e) {
             log.error(e.getMessage());
+            throw new DatabaseSchemaNotFoundException(database);
         }
     }
 
+    /**
+     * Prepare a statement for execution.
+     * @param sql The SQL statement(s).
+     * @return A {@link PreparedStatement} for use with escaping parameters
+     * @throws SQLException When something went wrong
+     * @apiNote You may not mix Updating/Inserting statements with queries.
+     */
     public PreparedStatement prepareStatement(String sql) throws SQLException {
         return conn.prepareStatement(sql);
     }
 
+    /**
+     * Get all database schemas on this database server.
+     * @return A {@link List} of {@link String} objects with the names of the database schemas
+     */
     public abstract List<String> getDatabases();
     public abstract List<String> getTables(String database);
     public abstract ResultSet getTableData(String database, String table) throws SQLException;
@@ -235,7 +273,7 @@ public abstract class ADatabase {
     public record TableInfo(String name, int rowCount, String engine) {}
 
     public static class ParameterBuilder {
-        private Map<String, String> parameters = new LinkedHashMap<>();
+        private final Map<String, String> parameters = new LinkedHashMap<>();
 
         public ParameterBuilder parameter(String name, String value) {
             parameters.put(name, value);

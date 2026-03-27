@@ -20,7 +20,7 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 @Slf4j
-public class PluginLoader {
+public final class PluginLoader {
     private final Gson GSON = new Gson();
 
     private final Registry registry;

@@ -1,12 +1,15 @@
 package de.julianweinelt.datacat.dbx.api;
 
+import lombok.Getter;
+
 import javax.swing.*;
 
 /**
- * Deprecated. Will be removed in future version v1.1.0<br>
+ * @deprecated since v1.0.0 and scheduled for removal in v1.1.0
  * Use {@link de.julianweinelt.datacat.dbx.api.ui.ShortcutAction} instead.
  */
-@Deprecated(forRemoval = true)
+@Getter
+@Deprecated(forRemoval = true, since = "1.0.0")
 public enum ShortcutAction {
     NEW_FILE("New File", KeyStroke.getKeyStroke("control N")),
     PREFERENCES("Preferences", KeyStroke.getKeyStroke("control P")),
@@ -36,11 +39,4 @@ public enum ShortcutAction {
         this.defaultKey = defaultKey;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public KeyStroke getDefaultKey() {
-        return defaultKey;
-    }
 }

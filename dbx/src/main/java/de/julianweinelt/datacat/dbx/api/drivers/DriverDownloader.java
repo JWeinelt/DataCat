@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.IntConsumer;
 
-public class DriverDownloader {
+public final class DriverDownloader {
 
     private static final HttpClient CLIENT = HttpClient.newBuilder()
             .followRedirects(HttpClient.Redirect.NORMAL)
@@ -33,9 +33,7 @@ public class DriverDownloader {
     public static CompletableFuture<File> download(
             String db,
             String version,
-            IntConsumer progress
-    ) {
-
+            IntConsumer progress) {
         DriverDownloadWrapper.DriverDownload driver =
                 DriverDownloadWrapper.getForDB(db, version);
 

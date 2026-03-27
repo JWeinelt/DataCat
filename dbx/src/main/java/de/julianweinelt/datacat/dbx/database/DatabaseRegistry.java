@@ -7,8 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Manages database type registering.
+ * @author Julian Weinelt
+ * @version 1.0.0
+ */
 @Slf4j
-public class DatabaseRegistry {
+public final class DatabaseRegistry {
     private final Map<String, DatabaseFactory> databases = new HashMap<>();
     private final Map<String, DatabaseMetaData> metaData = new HashMap<>();
 

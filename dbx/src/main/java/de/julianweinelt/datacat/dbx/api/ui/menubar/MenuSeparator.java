@@ -2,9 +2,9 @@ package de.julianweinelt.datacat.dbx.api.ui.menubar;
 
 import javax.swing.*;
 
-public class MenuSeparator extends MenuComponent<JMenuItem> {
+public final class MenuSeparator extends MenuComponent<JMenuItem> {
     @Override
-    public JMenuItem create() {
+    protected JMenuItem create() {
         return null;
     }
 }

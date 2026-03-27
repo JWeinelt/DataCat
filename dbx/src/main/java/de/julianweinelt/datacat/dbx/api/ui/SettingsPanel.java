@@ -27,6 +27,10 @@ public class SettingsPanel {
         return c;
     }
 
+    /**
+     * Add a {@link Component} to the panel, moving to the next free row.
+     * @param component The component to add
+     */
     public void add(Component component) {
         c.gridy++;
 

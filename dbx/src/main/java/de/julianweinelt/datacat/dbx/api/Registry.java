@@ -41,7 +41,7 @@ public class Registry {
     @Getter
     private JFrame mainFrame;
 
-    public Registry(DbxAPI api) {
+    protected Registry(DbxAPI api) {
         this.api = api;
     }
 
@@ -180,7 +180,10 @@ public class Registry {
     }
 
 
-
+    /**
+     * Registers a {@link Theme} object as a new editor theme.
+     * @param theme The theme object containing all important information
+     */
     public void registerTheme(Theme theme) {
         themes.add(theme);
     }
@@ -188,6 +191,11 @@ public class Registry {
         for (Theme t : themes) if (t.getUnlocalizedName().equals(name)) return t;
         return null;
     }
+
+    /**
+     * Gets an internal format for all installed themes to be used in the editor.
+     * @return A {@link Map} object containing the unlocalized name of the theme as the key and the defining plugin as the value
+     */
     public Map<String, String> themeData() {
         Map<String, String> data = new HashMap<>();
         for (Theme t : themes) {

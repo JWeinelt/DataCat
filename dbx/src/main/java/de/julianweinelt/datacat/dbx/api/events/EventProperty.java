@@ -12,7 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @Slf4j
 @SuppressWarnings("unused")
-public class EventProperty {
+public final class EventProperty {
     private final Object value;
     private final Class<?> valueClass;
 
@@ -26,7 +26,7 @@ public class EventProperty {
      *     EventProperty property = new EventProperty(42);
      * </pre>
      */
-    public EventProperty(Object value) {
+     EventProperty(Object value) {
         this.value = value;
         if (value != null) this.valueClass = value.getClass();
         else {

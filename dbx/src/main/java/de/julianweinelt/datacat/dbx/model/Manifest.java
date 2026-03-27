@@ -5,8 +5,14 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class for defining the DBX export manifest data.
+ * @author Julian Weinelt
+ * @version 1.0.0
+ * @since 0.0.1
+ */
 @Getter
-public class Manifest {
+public final class Manifest {
     private final String formatVersion = "1.0.0";
     private long createdAt;
 
@@ -24,16 +30,16 @@ public class Manifest {
     }
 
     @Getter
-    public static class Tool {
+    public static final class Tool {
         private final String name;
         private final String version;
 
-        protected Tool(String name, String version) {
+        Tool(String name, String version) {
             this.name = name;
             this.version = version;
         }
 
-        public static Tool create(String version) {
+        static Tool create(String version) {
             return new Tool("DataCat", version);
         }
     }
@@ -41,7 +47,7 @@ public class Manifest {
     public record Source(String dbms, String dbmsVersion) {}
 
     @Getter
-    public static class Export {
+    public static final class Export {
         private final String mode = "DBX";
         private final List<String> databases;
 

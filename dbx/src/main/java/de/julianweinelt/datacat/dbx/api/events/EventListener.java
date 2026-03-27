@@ -5,7 +5,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.reflect.Method;
 
-public class EventListener {
+public final class EventListener {
     private final Object instance;
     @Getter
     private final Method method;

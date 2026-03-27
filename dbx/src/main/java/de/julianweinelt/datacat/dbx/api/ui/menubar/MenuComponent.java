@@ -6,5 +6,9 @@ public abstract class MenuComponent<T extends JMenuItem> {
 
     protected MenuComponent() {}
 
-    public abstract T create();
+    /**
+     * Constructs a menu component
+     * @return The {@link MenuComponent} extending a {@link JMenuItem} object
+     */
+    protected abstract T create();
 }

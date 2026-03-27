@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubMenu extends MenuComponent<JMenu> {
+public final class SubMenu extends MenuComponent<JMenu> {
     private final String name;
     private final List<MenuComponent> children = new ArrayList<>();
 
@@ -17,7 +17,7 @@ public class SubMenu extends MenuComponent<JMenu> {
     }
 
     @Override
-    public JMenu create() {
+    protected JMenu create() {
         JMenu menu = new JMenu(name);
         for (MenuComponent child : children) {
             menu.add(child.create());

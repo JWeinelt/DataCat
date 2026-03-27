@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectionDialog extends JDialog {
+public final class SelectionDialog extends JDialog {
     private final NameTableModel tableModel;
     @Getter
     private boolean confirmed = false;

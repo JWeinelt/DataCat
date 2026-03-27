@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 @Slf4j
+//TODO: Move to plugins/make non-hardcoded
 public class DriverDownloadWrapper {
+    @Deprecated(since = "1.0.1-beta.1", forRemoval = true)
     public static String latestVersion(String db) {
         return switch (db) {
             case "mysql" -> "9.5.0";
@@ -17,6 +19,8 @@ public class DriverDownloadWrapper {
             default -> "unknown";
         };
     }
+
+    @Deprecated(since = "1.0.1-beta.1", forRemoval = true)
     public static DriverDownload getForDB(String db, String version) {
         switch (db) {
             case "mysql" -> {

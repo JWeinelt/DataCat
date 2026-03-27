@@ -1,12 +1,53 @@
 package de.julianweinelt.datacat.dbx.database;
 
+
+/**
+ * Defines which syntax different SQL databases use.
+ * @author Julian Weinelt
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public abstract class DatabaseSyntax {
+    /**
+     * Defines how this database queries tables.
+     * @return The SQL statement for viewing tables.
+     */
     public abstract String showTables();
+
+    /**
+     * Defines how this database queries database schemas.
+     * @return The SQL statement for viewing schemas.
+     */
     public abstract String showDatabases();
+
+    /**
+     * Defines how this database queries views.
+     * @return The SQL statement for viewing database views.
+     */
     public abstract String showViews();
+
+    /**
+     * Defines how this database queries functions.
+     * @return The SQL statement for viewing functions.
+     */
     public abstract String showFunctions();
+
+    /**
+     * Defines how this database queries triggers.
+     * @return The SQL statement for viewing triggers.
+     */
     public abstract String showTriggers();
+
+    /**
+     * Defines how this database it's type.
+     * @return The SQL statement for getting the database engine's name.
+     */
     public abstract String getType();
+
+    /**
+     * Defines how this database it's version.
+     * @return The SQL statement for getting the database engine's version.
+     */
     public abstract String getVersion();
 
     public static DatabaseSyntax MSSQL = new DatabaseSyntax() {

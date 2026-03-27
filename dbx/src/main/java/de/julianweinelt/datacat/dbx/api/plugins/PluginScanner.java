@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-public class PluginScanner {
+public final class PluginScanner {
     private static final Logger log = LoggerFactory.getLogger(PluginScanner.class);
 
     private final File pluginFolder;
@@ -30,7 +30,7 @@ public class PluginScanner {
      * @apiNote This method is intended for internal use only.
      */
     @ApiStatus.Internal
-    public List<PluginDescriptor> scan() {
+    List<PluginDescriptor> scan() {
         List<PluginDescriptor> descriptors = new ArrayList<>();
         if (!pluginFolder.exists()) if (pluginFolder.mkdirs()) log.info("PluginFolder created");
 

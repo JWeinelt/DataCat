@@ -5,7 +5,7 @@ import de.julianweinelt.datacat.dbx.api.exceptions.PluginInvalidException;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class PluginInstantiator {
+public final class PluginInstantiator {
 
     /**
      * Instantiates a plugin based on its descriptor and class loader.
@@ -19,7 +19,7 @@ public class PluginInstantiator {
      * @throws InstantiationException If the main class cannot be instantiated.
      * @throws IllegalAccessException If the constructor of the main class is not accessible.
      */
-    public DbxPlugin instantiate(PluginDescriptor descriptor, ClassLoader loader) throws
+    DbxPlugin instantiate(PluginDescriptor descriptor, ClassLoader loader) throws
             PluginInvalidException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
             InstantiationException, IllegalAccessException {
         String className = descriptor.config().mainClass();

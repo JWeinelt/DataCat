@@ -8,7 +8,7 @@ import lombok.Getter;
 
 import javax.swing.*;
 
-public class MenuItem extends MenuComponent<JMenuItem> {
+public final class MenuItem extends MenuComponent<JMenuItem> {
     private final String text;
     @Getter
     private final String id;
@@ -36,7 +36,7 @@ public class MenuItem extends MenuComponent<JMenuItem> {
     }
 
     @Override
-    public JMenuItem create() {
+    protected JMenuItem create() {
         return item;
     }
 }

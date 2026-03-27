@@ -19,10 +19,9 @@ import java.util.ServiceLoader;
 @Slf4j
 public class DriverManagerService {
     private final List<String> loadedDrivers = new ArrayList<>();
-
     private URLClassLoader driverLoader;
-
     private static DriverManagerService instance;
+
 
     public static DriverManagerService instance() {
         return instance;
