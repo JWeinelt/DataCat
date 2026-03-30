@@ -27,7 +27,7 @@ public class DbxAPI {
     private final List<DatabaseType> types = new ArrayList<>();
 
     @Getter
-    private final Registry registry;
+    private Registry registry = null;
     @Getter
     private final UIService uiService;
     @Getter
@@ -42,7 +42,11 @@ public class DbxAPI {
         this.systemPlugin = systemPlugin;
         this.apiFolder = apiFolder;
         if (apiFolder.mkdirs()) log.debug("API folder created");
+
+        if (registry != null) throw new IllegalStateException("API already initialized");
         registry = new Registry(this);
+
+
         dbRegistry = new DatabaseRegistry();
         uiService = new UIService();
         homeDirectories = new HomeDirectories();
