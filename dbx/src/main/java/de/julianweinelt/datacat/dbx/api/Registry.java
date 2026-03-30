@@ -54,6 +54,11 @@ public class Registry {
         return DbxAPI.registry();
     }
 
+
+    /**
+     * Gets the amount of events registered by plugins.
+     * @return The amount of events as an Integer
+     */
     public int getEventAmount() {
         int amount = 0;
         for (DbxPlugin plugin : plugins) {
