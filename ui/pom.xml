@@ -128,7 +128,7 @@
         <dependency>
             <groupId>com.fifesoft</groupId>
             <artifactId>autocomplete</artifactId>
-            <version>3.3.2</version>
+            <version>3.3.3</version>
         </dependency>
         <!-- Source: https://mvnrepository.com/artifact/com.fifesoft/spellchecker -->
         <dependency>
