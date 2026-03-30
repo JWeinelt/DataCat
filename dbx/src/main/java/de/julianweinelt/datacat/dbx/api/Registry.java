@@ -50,6 +50,10 @@ public class Registry {
         this.mainFrame = mainFrame;
     }
 
+    /**
+     * Gets the currently used instance of the {@link Registry}
+     * @return A {@link Registry} instance
+     */
     public static Registry instance() {
         return DbxAPI.registry();
     }
