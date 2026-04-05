@@ -11,6 +11,18 @@
 
     <artifactId>launcher</artifactId>
 
+
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>https://repo.codeblocksmc.com/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>https://repo.codeblocksmc.com/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

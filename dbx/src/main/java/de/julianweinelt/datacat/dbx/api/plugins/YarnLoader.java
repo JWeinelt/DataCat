@@ -2,6 +2,7 @@ package de.julianweinelt.datacat.dbx.api.plugins;
 
 import com.google.gson.Gson;
 import de.julianweinelt.datacat.dbx.api.plugins.yarn.FileManifest;
+import de.julianweinelt.datacat.dbx.api.plugins.yarn.Yarn;
 import de.julianweinelt.datacat.dbx.api.plugins.yarn.YarnManifest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +20,7 @@ public class YarnLoader {
     public YarnLoader() {
         if (baseFolder.mkdirs()) log.debug("Created yarn base folder");
         if (remappedFolder.mkdirs()) log.debug("Created yarn remapped folder");
+        discoverYarns();
     }
 
     public void discoverYarns() {
@@ -42,6 +44,9 @@ public class YarnLoader {
             log.info("Copying theme data from yarn {}", manifest.getName());
             copyThemeData(zipFile, manifest.getName());
             //TODO: Load plugins
+
+            Yarn yarn = new Yarn(fileManifest, manifest);
+            yarn.registerThemes();
             log.info("Finished loading yarn {}", manifest.getName());
         } catch (IOException e) {
             log.error("Failed to load yarn", e);
@@ -72,7 +77,7 @@ public class YarnLoader {
         Enumeration<? extends ZipEntry> entries = file.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
-            if (!entry.isDirectory() && entry.getName().startsWith("themes/")) continue;
+            if (!entry.isDirectory() && !entry.getName().startsWith("themes/")) continue;
 
             File targetFile = new File(targetFolder, entry.getName().substring("themes/".length()));
             File parent = targetFile.getParentFile();
