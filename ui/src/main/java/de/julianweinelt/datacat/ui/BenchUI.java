@@ -44,6 +44,7 @@ public class BenchUI {
     private MenuBar menuBar;
 
     private JPanel cardsContainer;
+    private JScrollPane cardsScroll;
 
     public void loadTheme(boolean showDialogOnError) {
         log.debug("Loading theme data...");
@@ -214,14 +215,24 @@ public class BenchUI {
     }
 
     public void updateProjectCards() {
-        cardsContainer = new JPanel();
-        cardsContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        cardsContainer.setOpaque(false);
+        if (cardsContainer == null) {
+            cardsContainer = new JPanel();
+            cardsContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+            cardsContainer.setOpaque(false);
+
+            cardsScroll = new JScrollPane(cardsContainer);
+            cardsScroll.setBorder(BorderFactory.createEmptyBorder());
+            cardsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            cardsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        }
+
+        cardsContainer.removeAll();
 
         for (Project p : ProjectManager.instance().getProjects()) {
             JPanel card = p.createCard(this);
             cardsContainer.add(card);
         }
+
         cardsContainer.revalidate();
         cardsContainer.repaint();
     }
@@ -254,11 +265,6 @@ public class BenchUI {
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         updateProjectCards();
-
-        JScrollPane cardsScroll = new JScrollPane(cardsContainer);
-        cardsScroll.setBorder(BorderFactory.createEmptyBorder());
-        cardsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        cardsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         JComponent newsPanel = createNewsPanel();
 
