@@ -1,5 +1,8 @@
 package de.julianweinelt.datacat;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -14,100 +17,50 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * Creates a .yarn package file from themes, plugins, and libraries.
- *
- * Invoke via: mvn datacat:createyarn
- */
 @Mojo(name = "createyarn")
 public class CreateYarnMojo extends AbstractMojo {
-
-    // -------------------------------------------------------------------------
-    // Injected Maven infrastructure
-    // -------------------------------------------------------------------------
+    private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
-
     @Component
     private RepositorySystem repositorySystem;
 
-    // -------------------------------------------------------------------------
-    // Plugin configuration parameters (set in the consuming project's pom.xml)
-    // -------------------------------------------------------------------------
-
-    /**
-     * Paths to JSON theme files to include under themes/ in the .yarn.
-     *
-     * <pre>
-     * &lt;themes&gt;
-     *   &lt;theme&gt;src/main/datacat/themes/dark.json&lt;/theme&gt;
-     *   &lt;theme&gt;src/main/datacat/themes/light.json&lt;/theme&gt;
-     * &lt;/themes&gt;
-     * </pre>
-     */
     @Parameter(property = "datacat.themes")
     private List<String> themes;
 
-    /**
-     * Absolute or project-relative paths to JAR plugin files to include under plugins/.
-     *
-     * <pre>
-     * &lt;plugins&gt;
-     *   &lt;plugin&gt;/opt/myapp/plugin-auth.jar&lt;/plugin&gt;
-     *   &lt;plugin&gt;target/my-plugin.jar&lt;/plugin&gt;
-     * &lt;/plugins&gt;
-     * </pre>
-     */
+    @Parameter(property = "datacat.authors")
+    private List<String> authors;
+
+    @Parameter(property = "datacat.description")
+    private String description;
+    @Parameter(property = "datacat.version")
+    private String version;
+
     @Parameter(property = "datacat.plugins")
     private List<String> plugins;
 
-    /**
-     * Maven library dependencies to resolve and bundle under plugins/.
-     *
-     * <pre>
-     * &lt;libraries&gt;
-     *   &lt;library&gt;
-     *     &lt;groupId&gt;com.google.guava&lt;/groupId&gt;
-     *     &lt;artifactId&gt;guava&lt;/artifactId&gt;
-     *     &lt;version&gt;32.1.2-jre&lt;/version&gt;
-     *   &lt;/library&gt;
-     * &lt;/libraries&gt;
-     * </pre>
-     */
     @Parameter(property = "datacat.libraries")
     private List<LibraryDefinition> libraries;
 
-    /**
-     * Output file name for the .yarn archive (without extension).
-     * Defaults to the project artifactId.
-     */
     @Parameter(defaultValue = "${project.artifactId}", property = "datacat.outputName")
     private String outputName;
 
-    /**
-     * Output directory for the generated .yarn file.
-     * Defaults to ${project.build.directory} (i.e. target/).
-     */
     @Parameter(defaultValue = "${project.build.directory}", property = "datacat.outputDirectory")
     private File outputDirectory;
-
-    // -------------------------------------------------------------------------
-    // Mojo entry point
-    // -------------------------------------------------------------------------
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("=== DataCat: Creating .yarn package ===");
 
-        // Ensure output directory exists
         if (!outputDirectory.exists()) {
             outputDirectory.mkdirs();
         }
@@ -117,10 +70,9 @@ public class CreateYarnMojo extends AbstractMojo {
 
         try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(yarnFile))) {
 
-            // --- meta.json placeholder (user provides the real one) ----------
             addMetaJsonPlaceholder(zip);
+            addPluginIcon(zip);
 
-            // --- themes/ -----------------------------------------------------
             if (themes != null && !themes.isEmpty()) {
                 getLog().info("Packaging " + themes.size() + " theme(s)...");
                 for (String themePath : themes) {
@@ -131,7 +83,6 @@ public class CreateYarnMojo extends AbstractMojo {
                 getLog().info("No themes configured.");
             }
 
-            // --- plugins/ (direct JAR paths) ---------------------------------
             if (plugins != null && !plugins.isEmpty()) {
                 getLog().info("Packaging " + plugins.size() + " plugin JAR(s)...");
                 for (String pluginPath : plugins) {
@@ -142,7 +93,6 @@ public class CreateYarnMojo extends AbstractMojo {
                 getLog().info("No plugin JARs configured.");
             }
 
-            // --- plugins/ (resolved Maven libraries) -------------------------
             if (libraries != null && !libraries.isEmpty()) {
                 getLog().info("Resolving and packaging " + libraries.size() + " librar(y/ies)...");
                 for (LibraryDefinition lib : libraries) {
@@ -160,34 +110,43 @@ public class CreateYarnMojo extends AbstractMojo {
         getLog().info("Successfully created: " + yarnFile.getName());
     }
 
-    // -------------------------------------------------------------------------
-    // Helpers
-    // -------------------------------------------------------------------------
-
-    /**
-     * Writes an empty meta.json stub so the archive always contains it.
-     * The user is expected to replace / overwrite this with their own meta.json
-     * by placing a meta.json in the project base directory — which takes priority.
-     */
     private void addMetaJsonPlaceholder(ZipOutputStream zip) throws IOException {
-        // Check if user has a meta.json in the project root
-        File userMeta = new File(project.getBasedir(), "meta.json");
-        if (userMeta.exists()) {
-            getLog().info("Using project meta.json: " + userMeta.getAbsolutePath());
-            addFileToZip(zip, userMeta, "meta.json");
+        zip.putNextEntry(new ZipEntry("meta.json"));
+        JsonObject o = new JsonObject();
+        o.addProperty("name", outputName);
+        o.addProperty("version", version);
+        o.addProperty("description", description);
+        o.add("authors", GSON.toJsonTree(authors));
+        o.add("libraries", GSON.toJsonTree(libraries));
+        o.add("plugins", GSON.toJsonTree(plugins));
+
+        zip.write(o.toString().getBytes(StandardCharsets.UTF_8));
+        zip.closeEntry();
+    }
+
+    private void addPluginIcon(ZipOutputStream zip) throws IOException {
+        File yarnIcon = new File(project.getBasedir(), "yarn.png");
+        if (yarnIcon.exists()) {
+            try (InputStream iS = new FileInputStream(yarnIcon)) {
+                zip.putNextEntry(new ZipEntry("icon.png"));
+                iS.transferTo(zip);
+                zip.closeEntry();
+            }
+            getLog().info("Using project yarn.png: " + yarnIcon.getAbsolutePath());
         } else {
-            getLog().warn("No meta.json found in project root – adding empty placeholder.");
-            zip.putNextEntry(new ZipEntry("meta.json"));
-            String placeholder = "{\n  \"name\": \"" + outputName + "\",\n  \"version\": \""
-                    + project.getVersion() + "\"\n}\n";
-            zip.write(placeholder.getBytes("UTF-8"));
-            zip.closeEntry();
+            try (InputStream in = getClass().getResourceAsStream("/plugin-default.png")) {
+                if (in == null) {
+                    getLog().warn("Default icon not found in plugin resources, skipping icon.");
+                    return;
+                }
+                zip.putNextEntry(new ZipEntry("icon.png"));
+                in.transferTo(zip);
+                zip.closeEntry();
+            }
+            getLog().info("No yarn.png found, using default plugin icon.");
         }
     }
 
-    /**
-     * Resolves a path that is either absolute or relative to the project base dir.
-     */
     private File resolveFile(String path) throws MojoExecutionException {
         File file = new File(path);
         if (!file.isAbsolute()) {
@@ -202,10 +161,7 @@ public class CreateYarnMojo extends AbstractMojo {
         return file;
     }
 
-    /**
-     * Resolves a Maven library artifact via the local/remote repositories and
-     * returns the JAR file from the local repository cache.
-     */
+
     private File resolveLibrary(LibraryDefinition lib) throws MojoExecutionException {
         getLog().info("  Resolving library: " + lib);
 
@@ -240,9 +196,6 @@ public class CreateYarnMojo extends AbstractMojo {
         return jar;
     }
 
-    /**
-     * Writes a single file into the ZIP stream at the given entry path.
-     */
     private void addFileToZip(ZipOutputStream zip, File file, String entryPath)
             throws IOException {
 
