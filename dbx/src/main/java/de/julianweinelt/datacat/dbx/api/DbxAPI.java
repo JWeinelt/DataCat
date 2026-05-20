@@ -1,5 +1,6 @@
 package de.julianweinelt.datacat.dbx.api;
 
+import de.julianweinelt.datacat.dbx.api.drivers.DriverDownloadManager;
 import de.julianweinelt.datacat.dbx.api.plugins.DbxPlugin;
 import de.julianweinelt.datacat.dbx.api.ui.UIService;
 import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
@@ -37,6 +38,9 @@ public class DbxAPI {
     @Getter
     private final DbxPlugin systemPlugin;
 
+    @Getter
+    private final DriverDownloadManager driverDownloadManager;
+
     public DbxAPI(File apiFolder, DbxPlugin systemPlugin) {
         instance = this;
         this.systemPlugin = systemPlugin;
@@ -50,6 +54,9 @@ public class DbxAPI {
         dbRegistry = new DatabaseRegistry();
         uiService = new UIService();
         homeDirectories = new HomeDirectories();
+
+        driverDownloadManager = new DriverDownloadManager();
+
         init(systemPlugin);
     }
 
