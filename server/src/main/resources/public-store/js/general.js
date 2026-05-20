@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:7001/'
+const API_URL = 'http://localhost:63342/DataCat/server/public-store/'
 
 
 function linkHeader() {
@@ -45,12 +45,12 @@ function redirectTo(page) {
 }
 
 async function loadHeader() {
-    const res = await fetch("/components/header.html");
+    const res = await fetch(API_URL + "components/header.html");
     document.body.insertAdjacentHTML("beforebegin", await res.text());
 }
 
 async function loadFooter() {
-    const res = await fetch("/components/footer.html");
+    const res = await fetch(API_URL + "components/footer.html");
     document.body.insertAdjacentHTML("beforeend", await res.text());
 }
 

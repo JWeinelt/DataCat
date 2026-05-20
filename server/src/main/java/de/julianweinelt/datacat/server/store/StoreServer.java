@@ -60,7 +60,7 @@ public class StoreServer {
                         ctx.status(404);
                     }
                 })
-                .get("/api/v1/plugin", ctx -> {
+                .get("/api/v1/plugin/popular", ctx -> {
 
                 })
         .start(7001);
