@@ -36,4 +36,13 @@ public final class DriverDownloadManager {
         for (PluginDriver d : registeredDrivers) if (d.getInternalName().equals(name)) return d;
         return null;
     }
+
+    public List<String> registeredDriverNames() {
+        return registeredDrivers.stream()
+                .map(PluginDriver::getInternalName)
+                .toList();
+    }
+    public int registeredDriverCount() {
+        return registeredDrivers.size();
+    }
 }

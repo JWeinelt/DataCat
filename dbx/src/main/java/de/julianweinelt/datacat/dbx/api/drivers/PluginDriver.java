@@ -65,6 +65,7 @@ public abstract class PluginDriver {
      * @see #addVersion(String, boolean, VersionStatus)
      */
     public abstract void defineVersions();
+    public abstract CompletableFuture<Void> defineVersionsASync();
 
     /**
      * Registers a new version for this driver, giving just the name.<br>
