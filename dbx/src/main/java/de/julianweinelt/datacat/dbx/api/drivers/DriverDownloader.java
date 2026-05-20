@@ -1,6 +1,7 @@
 package de.julianweinelt.datacat.dbx.api.drivers;
 
 import de.julianweinelt.datacat.dbx.api.DbxAPI;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.IntConsumer;
 
+@Slf4j
 public final class DriverDownloader {
 
     private static final HttpClient CLIENT = HttpClient.newBuilder()
@@ -20,28 +22,28 @@ public final class DriverDownloader {
             .build();
 
     public static CompletableFuture<File> download(String db, String version) {
-        DriverDownloadWrapper.DriverDownload driver =
-                DriverDownloadWrapper.getForDB(db, version);
+        PluginDriver driver = DriverDownloadManager.instance().byName(db);
+        if (driver == null) return CompletableFuture.failedFuture(
+                new IllegalArgumentException("Unsupported DB: " + db));
 
-        if (driver == null)
-            return CompletableFuture.failedFuture(
-                    new IllegalArgumentException("Unsupported DB: " + db));
-
-        return download(driver, DbxAPI.driversFolder(), null);
+        return download(new DriverDownloadWrapper.DriverDownload(driver.downloadURL(version), driver.isZippedFile(),
+                        driver.getInternalName() + (driver.isZippedFile() ? "." + driver.archiveType() : ".jar")),
+                DbxAPI.driversFolder(), null);
     }
 
     public static CompletableFuture<File> download(
             String db,
             String version,
             IntConsumer progress) {
-        DriverDownloadWrapper.DriverDownload driver =
-                DriverDownloadWrapper.getForDB(db, version);
+        PluginDriver driver = DriverDownloadManager.instance().byName(db);
 
         if (driver == null)
             return CompletableFuture.failedFuture(
                     new IllegalArgumentException("Unsupported DB: " + db));
 
-        return download(driver, DbxAPI.driversFolder(), progress);
+        return download(new DriverDownloadWrapper.DriverDownload(driver.downloadURL(version), driver.isZippedFile(),
+                driver.getInternalName() + (driver.isZippedFile() ? "." + driver.archiveType() : ".jar")),
+                DbxAPI.driversFolder(), progress);
     }
 
     public static CompletableFuture<File> download(
@@ -50,7 +52,7 @@ public final class DriverDownloader {
             IntConsumer progress) {
         try {
             if (!targetFolder.exists())
-                targetFolder.mkdirs();
+                if (targetFolder.mkdirs()) log.debug("Created download driver target folder");
 
             File target = new File(targetFolder, driver.fileName());
 

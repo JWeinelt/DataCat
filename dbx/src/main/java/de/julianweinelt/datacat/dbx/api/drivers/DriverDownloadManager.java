@@ -5,8 +5,17 @@ import de.julianweinelt.datacat.dbx.api.exceptions.NoDriverFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DriverDownloadManager {
+public final class DriverDownloadManager {
     private final List<PluginDriver> registeredDrivers = new ArrayList<>();
+
+    private static DriverDownloadManager instance;
+
+    public static DriverDownloadManager instance() {
+        return instance;
+    }
+    public DriverDownloadManager() {
+        instance = this;
+    }
 
     public void register(PluginDriver driver) {
         registeredDrivers.add(driver);
@@ -23,7 +32,7 @@ public class DriverDownloadManager {
         return driver.getInternalName() + "-" + version + "." + (driver.isZippedFile() ? driver.archiveType() : "jar");
     }
 
-    private PluginDriver byName(String name) {
+    public PluginDriver byName(String name) {
         for (PluginDriver d : registeredDrivers) if (d.getInternalName().equals(name)) return d;
         return null;
     }
