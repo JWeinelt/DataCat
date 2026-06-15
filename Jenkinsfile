@@ -70,6 +70,11 @@ pipeline {
                       --dest dist \
                       --app-version ${BUILD_NUMBER}
                 '''
+                
+                sh '''
+                    cd dist
+                    tar -czf DataCat-linux.tar.gz DataCat
+                '''
             }
         }
 
