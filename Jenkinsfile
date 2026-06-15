@@ -52,6 +52,13 @@ pipeline {
             }
         
             steps {
+                deleteDir()
+                checkout scm
+        
+                sh 'ls -la'
+                sh 'chmod +x mvnw'
+        
+                sh './mvnw -pl ui -am clean package -DskipTests'
                 sh '''
                     rm -rf dist
         
