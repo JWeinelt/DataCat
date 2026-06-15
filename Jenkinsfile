@@ -46,20 +46,23 @@ pipeline {
                 sh './mvnw -pl ui -am clean package -DskipTests'
             }
         }
-        stage('Create Linux Package (jpackage)') {
+        stage('Create Linux App Image') {
+            agent {
+                label 'linux-builder'
+            }
+        
             steps {
                 sh '''
-                rm -rf dist
-                mkdir -p dist
+                    rm -rf dist
         
-                jpackage \
-                  --type app-image \
-                  --name DataCat \
-                  --input ui/target \
-                  --main-jar DataCat.jar \
-                  --main-class de.julianweinelt.datacat.DataCat \
-                  --dest dist \
-                  --app-version 1.0.0
+                    jpackage \
+                      --type app-image \
+                      --name DataCat \
+                      --input ui/target \
+                      --main-jar DataCat.jar \
+                      --main-class de.julianweinelt.datacat.DataCat \
+                      --dest dist \
+                      --app-version ${BUILD_NUMBER}
                 '''
             }
         }
