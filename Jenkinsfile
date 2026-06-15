@@ -48,7 +48,7 @@ pipeline {
         }
         stage('Create Linux App Image') {
             agent {
-                label 'linux-builder'
+                label 'Linux-Build'
             }
         
             steps {
