@@ -41,15 +41,32 @@ pipeline {
             }
         }
 
-        stage('Package Artifacts') {
+        stage('Build UI') {
             steps {
-                sh './mvnw package -DskipTests'
+                sh './mvnw -pl ui -am clean package -DskipTests'
+            }
+        }
+        stage('Create Linux Package (jpackage)') {
+            steps {
+                sh '''
+                rm -rf dist
+                mkdir -p dist
+        
+                jpackage \
+                  --type deb \
+                  --name DataCat \
+                  --input ui/target \
+                  --main-jar DataCat.jar \
+                  --main-class de.julianweinelt.datacat.DataCat \
+                  --dest dist \
+                  --app-version 1.0.0
+                '''
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'ui/target/DataCat.jar', fingerprint: true
             }
         }
     }
