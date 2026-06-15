@@ -47,18 +47,17 @@ pipeline {
             }
         }
         stage('Create Linux App Image') {
-            agent {
-                label 'Linux-Build'
-            }
+            agent { label 'Linux-Build' }
         
             steps {
-                deleteDir()
+                cleanWs()
+        
                 checkout scm
         
-                sh 'ls -la'
                 sh 'chmod +x mvnw'
         
                 sh './mvnw -pl ui -am clean package -DskipTests'
+        
                 sh '''
                     rm -rf dist
         
