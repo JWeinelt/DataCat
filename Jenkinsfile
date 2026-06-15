@@ -53,7 +53,7 @@ pipeline {
                 mkdir -p dist
         
                 jpackage \
-                  --type deb \
+                  --type app-image \
                   --name DataCat \
                   --input ui/target \
                   --main-jar DataCat.jar \
