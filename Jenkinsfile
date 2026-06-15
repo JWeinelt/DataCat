@@ -75,11 +75,7 @@ pipeline {
                     cd dist
                     tar -czf DataCat-linux.tar.gz DataCat
                 '''
-            }
-        }
 
-        stage('Archive Artifacts') {
-            steps {
                 archiveArtifacts artifacts: 'dist/DataCat-linux.tar.gz'
             }
         }
