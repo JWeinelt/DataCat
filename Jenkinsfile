@@ -80,7 +80,7 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'dist/**/*'
+                archiveArtifacts artifacts: 'dist/DataCat-linux.tar.gz'
             }
         }
     }
