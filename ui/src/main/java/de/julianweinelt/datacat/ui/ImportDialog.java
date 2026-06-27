@@ -6,6 +6,8 @@ import de.julianweinelt.datacat.dbx.database.ADatabase;
 import de.julianweinelt.datacat.dbx.backup.DatabaseImporter;
 import de.julianweinelt.datacat.dbx.backup.DbxArchiveReader;
 import de.julianweinelt.datacat.dbx.backup.ImportListener;
+import de.julianweinelt.datacat.ui.importdiag.DatabaseMappingDialog;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -13,10 +15,14 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static de.julianweinelt.datacat.dbx.util.LanguageManager.translate;
 
+@Slf4j
 public class ImportDialog extends JDialog implements ImportListener {
 
     private final JTextField archiveField = new JTextField();
@@ -27,28 +33,47 @@ public class ImportDialog extends JDialog implements ImportListener {
     private final JButton startButton = new JButton(translate("dialog.import.button.start"));
     private final JButton cancelButton = new JButton(translate("dialog.export.button.cancel"));
     private final JButton browseButton = new JButton("...");
+
+    private final JTextField databasesField = new JTextField();
+    private final JComboBox<String> importModeBox = new JComboBox<>(new String[]{
+            translate("dialog.import.mode.replace"),
+            translate("dialog.import.mode.merge"),
+            translate("dialog.import.mode.skip-existing")
+    });
+    private final JButton databasesButton =
+            new JButton(translate("dialog.import.button.databases"));
+
     private final Taskbar taskbar;
+    private final Frame parent;
 
     private Thread importThread;
 
+    private DbxArchiveReader archiveReader;
+    private DatabaseImporter importer;
+
     private ADatabase targetDatabase = null;
+
+    private List<String> databasesLoadedFromServer;
+
+    private final Map<String, String> importDBMappings = new HashMap<>();
 
     public ImportDialog(Frame owner) {
         super(owner, translate("dialog.import.title"), true);
+        this.parent = owner;
         BenchUI.addEscapeKeyBind(this);
 
         taskbar = Taskbar.getTaskbar();
         if (!taskbar.isSupported(Taskbar.Feature.PROGRESS_STATE_WINDOW)) {
-            taskbar.setWindowProgressState(owner, Taskbar.State.INDETERMINATE);
+            taskbar.setWindowProgressState(parent, Taskbar.State.INDETERMINATE);
         } else {
-            taskbar.setWindowProgressState(owner, Taskbar.State.NORMAL);
+            taskbar.setWindowProgressState(parent, Taskbar.State.NORMAL);
         }
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 if (taskbar.isSupported(Taskbar.Feature.PROGRESS_STATE_WINDOW)) {
-                    taskbar.setWindowProgressState(owner, Taskbar.State.OFF);
+                    taskbar.setWindowProgressState(parent, Taskbar.State.OFF);
                 }
             }
         });
@@ -64,69 +89,135 @@ public class ImportDialog extends JDialog implements ImportListener {
 
     private void initUI() {
         JPanel top = new JPanel(new GridBagLayout());
+        top.setBorder(BorderFactory.createTitledBorder(
+                translate("dialog.import.settings")
+        ));
+
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4, 4, 4, 4);
         c.fill = GridBagConstraints.HORIZONTAL;
 
         archiveField.setEditable(false);
         targetField.setEditable(false);
-        //targetField.setText(targetDatabase);
+        databasesField.setEditable(false);
 
-        c.gridx = 0; c.gridy = 0;
         JComboBox<String> projects = new JComboBox<>();
         projects.addItem(translate("dialog.import.select.project"));
-        ProjectManager.instance().getProjects().forEach(project -> projects.addItem(project.getName()));
+
+        ProjectManager.instance().getProjects()
+                .forEach(project -> projects.addItem(project.getName()));
+
         projects.addActionListener(e -> {
             String selected = (String) projects.getSelectedItem();
-            if (selected == null) return;
-            if (selected.equals(translate("dialog.import.select.project"))) return;
 
-            Project project = ProjectManager.instance().getProject(selected);
+            if (selected == null) return;
+            if (selected.equals(
+                    translate("dialog.import.select.project")
+            )) return;
+
+            Project project =
+                    ProjectManager.instance().getProject(selected);
 
             targetDatabase = ADatabase.of(
                     project.getDatabaseType(),
                     project.getServer().split(":")[0],
-                    (project.getServer().split(":").length == 1) ? 3306 : Integer.parseInt(project.getServer().split(":")[1]),
+                    project.getServer().split(":").length == 1
+                            ? 3306
+                            : Integer.parseInt(
+                            project.getServer().split(":")[1]
+                    ),
                     project.getUsername(),
                     project.getPassword()
             );
-            if (!archiveField.getText().isEmpty())
-                startButton.setEnabled(true);
-            targetField.setText(project.getName());
+            if (targetDatabase.connect()) {
+                databasesLoadedFromServer = targetDatabase.getDatabases();
+                makeDBChecks();
+            } else {
+                log.error("Could not connect to database!");
+            }
 
+            targetField.setText(project.getName());
         });
+
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0;
+        top.add(
+                new JLabel(translate("dialog.import.project")),
+                c
+        );
+
+        c.gridx = 1;
+        c.weightx = 1;
         top.add(projects, c);
 
-        c.gridx = 0; c.gridy = 1;
-        top.add(new JLabel(translate("dialog.import.archive")), c);
+        c.gridx = 2;
+        c.weightx = 0;
+        top.add(
+                new JLabel(translate("dialog.import.mode")),
+                c
+        );
 
-        c.gridx = 1; c.weightx = 1;
+        c.gridx = 3;
+        c.weightx = 1;
+        top.add(importModeBox, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weightx = 0;
+        top.add(
+                new JLabel(translate("dialog.import.archive")),
+                c
+        );
+
+        c.gridx = 1;
+        c.gridwidth = 2;
+        c.weightx = 1;
         top.add(archiveField, c);
 
-        c.gridx = 2; c.weightx = 0;
+        c.gridx = 3;
+        c.gridwidth = 1;
+        c.weightx = 0;
         top.add(browseButton, c);
 
-        c.gridx = 0; c.gridy = 2;
-        top.add(new JLabel(translate("dialog.import.target-db")), c);
+        c.gridx = 0;
+        c.gridy = 2;
+        c.weightx = 0;
+        top.add(
+                new JLabel(translate("dialog.import.databases")),
+                c
+        );
 
-        c.gridx = 1; c.gridwidth = 2;
-        top.add(targetField, c);
+        c.gridx = 1;
+        c.gridwidth = 2;
+        c.weightx = 1;
+        top.add(databasesField, c);
+
+        c.gridx = 3;
+        c.gridwidth = 1;
+        c.weightx = 0;
+        top.add(databasesButton, c);
 
         add(top, BorderLayout.NORTH);
 
         logArea.setEditable(false);
-        logArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        logArea.setFont(
+                new Font(Font.MONOSPACED, Font.PLAIN, 12)
+        );
 
         add(new JScrollPane(logArea), BorderLayout.CENTER);
 
         JPanel bottom = new JPanel(new BorderLayout(8, 8));
         bottom.add(progressBar, BorderLayout.CENTER);
 
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel buttons =
+                new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
         buttons.add(cancelButton);
         buttons.add(startButton);
 
         bottom.add(buttons, BorderLayout.SOUTH);
+
         add(bottom, BorderLayout.SOUTH);
     }
 
@@ -142,10 +233,11 @@ public class ImportDialog extends JDialog implements ImportListener {
                     targetDatabase.rollback();
                 } catch (Exception ignored) {}
                 dispose();
-                taskbar.setWindowProgressState(this, Taskbar.State.OFF);
+                taskbar.setWindowProgressState(parent, Taskbar.State.OFF);
             }
         });
         startButton.addActionListener(e -> startImport());
+        databasesButton.addActionListener(e -> makeDBChecks());
     }
 
     private void chooseArchive() {
@@ -156,11 +248,46 @@ public class ImportDialog extends JDialog implements ImportListener {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             archiveField.setText(file.getAbsolutePath());
-            if (targetDatabase != null) {
-                startButton.setEnabled(true);
-            }
+            createImportReader();
+            makeDBChecks();
         }
     }
+
+    private void makeDBChecks() {
+        if (archiveReader == null) return;
+        if (targetDatabase != null) {
+            //startButton.setEnabled(true);
+            if (databasesLoadedFromServer != null) {
+                openDatabaseSelection();
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        translate("dialog.import.connection-failed"),
+                        translate("dialog.import.error.title"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    translate("dialog.import.select-project-first"),
+                    translate("dialog.import.error.title"),
+                    JOptionPane.WARNING_MESSAGE
+            );
+        }
+    }
+
+    private void createImportReader() {
+        try {
+            archiveReader = new DbxArchiveReader(new File(archiveField.getText()).toPath());
+
+            importer = new DatabaseImporter(archiveReader, targetDatabase, this, this);
+            importer.readManifest();
+        } catch (IOException e) {
+            logArea.append(translate("dialog.import.error.init") + "\n");
+        }
+    }
+
 
     private void startImport() {
         if (archiveField.getText().isEmpty()) {
@@ -178,14 +305,12 @@ public class ImportDialog extends JDialog implements ImportListener {
         logArea.setText("");
         progressBar.setValue(0);
 
+        message("======== DATABASE MAPPINGS ======");
+        importDBMappings.forEach((source, target) -> message(source + " -> " + target));
+        message("=================================");
+
         importThread = new Thread(() -> {
             try {
-                DbxArchiveReader reader =
-                        new DbxArchiveReader(new File(archiveField.getText()).toPath());
-
-                DatabaseImporter importer =
-                        new DatabaseImporter(reader, targetDatabase, this, this);
-
                 message(translate("dialog.import.log.readmanifest"));
                 importer.readManifest();
                 message(translate("dialog.import.log.validate"));
@@ -196,10 +321,10 @@ public class ImportDialog extends JDialog implements ImportListener {
                 importer.loadSchemas();
                 message(translate("dialog.import.log.importing"));
                 importer.importData();
-                taskbar.setWindowProgressState(this, Taskbar.State.OFF);
+                taskbar.setWindowProgressState(parent, Taskbar.State.OFF);
 
             } catch (Exception ex) {
-                taskbar.setWindowProgressState(this, Taskbar.State.ERROR);
+                taskbar.setWindowProgressState(parent, Taskbar.State.ERROR);
                 onError("Import failed", ex);
                 message(translate("dialog.import.import-failed.text", Map.of("error", ex.getMessage())));
                 SwingUtilities.invokeLater(() -> {
@@ -209,12 +334,33 @@ public class ImportDialog extends JDialog implements ImportListener {
                                 translate("dialog.import.import-failed.title"),
                                 JOptionPane.ERROR_MESSAGE
                         );
-                    taskbar.setWindowProgressState(this, Taskbar.State.OFF);
+                    taskbar.setWindowProgressState(parent, Taskbar.State.OFF);
                     }
                 );
             }
         }, "dbx-import-thread");
         importThread.start();
+    }
+
+    private void openDatabaseSelection() {
+        DatabaseMappingDialog dialog =
+                new DatabaseMappingDialog(
+                        this,
+                        importer.getDatabases(),
+                        databasesLoadedFromServer
+                );
+
+        dialog.setVisible(true);
+
+        if (dialog.isConfirmed()) {
+
+            Map<String, String> mappings =
+                    dialog.getMappings();
+
+            importDBMappings.clear();
+            importDBMappings.putAll(mappings);
+            startButton.setEnabled(true);
+        }
     }
 
     @Override
@@ -232,7 +378,7 @@ public class ImportDialog extends JDialog implements ImportListener {
             progressBar.setValue(current);
             progressBar.setStringPainted(true);
             if (taskbar.isSupported(Taskbar.Feature.PROGRESS_VALUE))
-                taskbar.setWindowProgressValue(this, current * 100 / total);
+                taskbar.setWindowProgressValue(parent, current * 100 / total);
         });
     }
 
