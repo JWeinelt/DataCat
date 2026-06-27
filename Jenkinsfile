@@ -55,7 +55,7 @@ pipeline {
              steps {
                  script {
                      env.MAVEN_VERSION = sh(
-                         script: './mvnw help:evaluate -Dexpression=project.version -q -DforceStdout',
+                         script: "./mvnw help:evaluate -Dexpression='project.version' -q -DforceStdout",
                          returnStdout: true
                      ).trim()
 
