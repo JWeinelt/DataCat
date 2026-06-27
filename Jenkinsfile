@@ -85,7 +85,7 @@ pipeline {
             }
         }
         stage('Create Windows Exe') {
-            agent { label 'Linux-Build' }
+            agent { label 'windows-build' }
 
             steps {
                 cleanWs()
@@ -107,7 +107,7 @@ pipeline {
                       --app-version ${BUILD_NUMBER}
                 '''
 
-                archiveArtifacts artifacts: 'dist/DataCat-linux.tar.gz'
+                archiveArtifacts artifacts: 'dist/*.exe'
             }
         }
     }
