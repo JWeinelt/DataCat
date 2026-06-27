@@ -44,7 +44,17 @@ public abstract class ADatabase {
      * @return <code>true</code> if connection was successful, otherwise <code>false</code>
      */
     public boolean connect() {
-        return connect(metaData.defaultParameters());
+        try {
+            if (conn == null || conn.isClosed()) return connect(metaData.defaultParameters());
+            return conn != null && !conn.isClosed();
+        } catch (SQLException e) {
+            log.error("SQL connection failed: {}", e.getMessage());
+            return connect(metaData.defaultParameters());
+        }
+    }
+
+    public Connection connection() {
+        return conn;
     }
 
     /**
