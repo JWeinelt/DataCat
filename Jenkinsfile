@@ -15,6 +15,7 @@ pipeline {
         }
 
         stage('Debug Workspace') {
+            agent { label 'Linux-Build' }
             steps {
                 sh 'pwd'
                 sh 'ls -la'
@@ -23,6 +24,7 @@ pipeline {
         }
 
         stage('Prepare Maven Wrapper') {
+            agent { label 'Linux-Build' }
             steps {
                 sh 'chmod +x mvnw || true'
                 sh './mvnw -v'
@@ -30,18 +32,21 @@ pipeline {
         }
 
         stage('Clean & Build') {
+            agent { label 'Linux-Build' }
             steps {
                 sh './mvnw clean install -DskipTests'
             }
         }
 
         stage('Run Tests') {
+            agent { label 'Linux-Build' }
             steps {
                 sh './mvnw test'
             }
         }
 
         stage('Build UI') {
+            agent { label 'Linux-Build' }
             steps {
                 sh './mvnw -pl ui -am clean package -DskipTests'
             }
