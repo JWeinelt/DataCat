@@ -79,6 +79,32 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/DataCat-linux.tar.gz'
             }
         }
+        stage('Create Windows Exe') {
+            agent { label 'Linux-Build' }
+
+            steps {
+                cleanWs()
+
+                checkout scm
+
+                sh './mvnw -pl ui -am clean package -DskipTests'
+
+                sh '''
+                    rm -rf dist
+
+                    jpackage \
+                      --type exe \
+                      --name DataCat \
+                      --input ui/target \
+                      --main-jar DataCat.jar \
+                      --main-class de.julianweinelt.datacat.DataCat \
+                      --dest dist \
+                      --app-version ${BUILD_NUMBER}
+                '''
+
+                archiveArtifacts artifacts: 'dist/DataCat-linux.tar.gz'
+            }
+        }
     }
 
     post {
