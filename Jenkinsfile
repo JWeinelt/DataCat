@@ -6,6 +6,10 @@ pipeline {
         disableConcurrentBuilds()
     }
 
+    environment {
+        MAVEN_VERSION = ''
+    }
+
     stages {
 
         stage('Checkout') {
@@ -45,6 +49,21 @@ pipeline {
             }
         }
 
+        stage('Read Maven Version') {
+             agent { label 'Linux-Build' }
+
+             steps {
+                 script {
+                     env.MAVEN_VERSION = sh(
+                         script: './mvnw help:evaluate -Dexpression=project.version -q -DforceStdout',
+                         returnStdout: true
+                     ).trim()
+
+                     echo "Building version ${env.MAVEN_VERSION}"
+                 }
+             }
+         }
+
         stage('Build UI') {
             agent { label 'Linux-Build' }
             steps {
@@ -73,7 +92,7 @@ pipeline {
                       --main-jar DataCat.jar \
                       --main-class de.julianweinelt.datacat.DataCat \
                       --dest dist \
-                      --app-version ${BUILD_NUMBER}
+                      --app-version ${MAVEN_VERSION}
                 '''
                 
                 sh '''
@@ -104,7 +123,7 @@ pipeline {
                       --main-jar DataCat.jar \
                       --main-class de.julianweinelt.datacat.DataCat \
                       --dest dist \
-                      --app-version ${BUILD_NUMBER}
+                      --app-version ${MAVEN_VERSION}
                 '''
 
                 archiveArtifacts artifacts: 'dist/*.exe'
