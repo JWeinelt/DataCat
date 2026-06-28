@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup DataCat Flow</title>
+    <link rel="icon" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fade {
+            from {
+                opacity:0;
+                transform:translateY(15px);
+            }
+            to {
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+        .animate-fade {
+
+            animation: fade .25s ease;
+
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+<div class="min-h-screen flex">
+    <aside class="w-72 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 p-6 flex flex-col">
+        <div class="flex items-center gap-3 mb-10">
+            <img class="w-10 h-auto rounded-xl flex items-center justify-center text-white font-bold" src="logo.png"
+                 alt="DataCat Logo">
+            <div>
+                <h1 class="font-bold text-lg">DataCat Flow</h1>
+                <p class="text-xs text-gray-500">Configuration</p>
+            </div>
+        </div>
+
+        <nav class="space-y-2">
+            <a data-target="welcome" data-i18n="welcome.title.nav"
+               class="nav-item block px-4 py-3 rounded-xl bg-blue-600 text-white transition cursor-pointer text-gray-500 disabled">
+                Allgemein
+            </a>
+            <a data-target="basic" data-i18n="basic.title.nav"
+               class="nav-item block px-4 py-3 rounded-xl hover:bg-gray-700 text-gray-500 transition cursor-pointer disabled">
+                Allgemein
+            </a>
+
+            <a data-target="database" data-i18n="database.title.nav"
+               class="nav-item block px-4 py-3 rounded-xl hover:bg-gray-700 text-gray-500 transition cursor-pointer disabled">
+                Datenbank
+            </a>
+
+            <a data-target="security" data-i18n="security.title.nav"
+               class="nav-item block px-4 py-3 rounded-xl hover:bg-gray-700 text-gray-500 transition cursor-pointer disabled">
+                Sicherheit
+            </a>
+
+            <a data-target="updates" data-i18n="updates.title.nav"
+               class="nav-item block px-4 py-3 rounded-xl hover:bg-gray-700 text-gray-500 transition cursor-pointer disabled">
+                Updates
+            </a>
+
+            <a data-target="finish" data-i18n="finish.title.nav"
+               class="nav-item block px-4 py-3 rounded-xl hover:bg-gray-700 text-gray-500 transition cursor-pointer disabled">
+                Updates
+            </a>
+        </nav>
+
+        <div class="mt-auto text-xs text-gray-500">
+            DataCat Flow v1.0.0
+        </div>
+    </aside>
+    <main class="flex-1 p-10">
+        <section id="welcome" data-page="welcome" class="page">
+            <div class="space-y-4">
+                <h2 class="text-white text-3xl font-bold" data-i18n="welcome.title"></h2>
+                <p class="text-gray-400" data-i18n="welcome.description"></p>
+                <button data-target="basic" class="nav-item next-page px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+                        data-i18n="basic.btn.start">
+                    Speichern
+                </button>
+            </div>
+        </section>
+        <section id="basic" data-page="basic" class="page hidden">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold" data-i18n="basic.title">
+                    Basic Settings
+                </h2>
+                <p class="text-gray-500 mt-2" data-i18n="basic.description">
+                    Verwalte die grundlegenden Einstellungen von DataCat.
+                </p>
+            </div>
+            <div class="max-w-4xl space-y-8">
+                <section class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow">
+                    <h3 class="text-xl font-semibold mb-6" data-i18n="basic.app.title">
+                        Anwendung
+                    </h3>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" data-i18n="basic.app.language">
+                                Sprache
+                            </label>
+                            <div id="language-dropdown" class="dropdown relative w-full">
+                                <button
+                                        type="button"
+                                        class="dropdown-button flex w-full items-center justify-between rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3">
+                                    <span class="dropdown-label"></span>
+                                    <svg class="dropdown-arrow h-5 w-5 transition-transform duration-200"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor">
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              stroke-width="2"
+                                              d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div id="lang-drop" class="dropdown-menu pointer-events-none absolute left-0
+										top-full
+										mt-2
+										w-full
+										z-50
+										overflow-hidden
+										rounded-xl
+										border
+										border-gray-300
+										dark:border-gray-700
+										bg-white dark:bg-gray-900 shadow-lg opacity-0
+										-translate-y-2 transition-all duration-200">
+                                    <button class="dropdown-option cursor-not-allowed w-full px-4 py-3 text-left text-gray-400 transition hover:bg-gray-100 dark:hover:bg-gray-800 disabled" data-value="disabled" data-i18n="basic.app.lang.select">
+                                        Select language
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <label class="block text-sm font-medium">
+                                        Hostname
+                                    </label>
+                                    <p class="text-sm text-gray-500 mb-2" data-i18n="basic.app.hostname-description"></p>
+                                </div>
+                                <div>
+                                    <div class="w-6 h-6 bg-blue-400"
+                                         style="mask: url('circle-question-regular-full.svg') center / contain no-repeat;">
+                                    </div>
+                                </div>
+                            </div>
+                            <input
+                                    type="text"
+                                    value="0.0.0.0"
+                                    class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+                </section>
+                <section class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow">
+                    <h3 class="text-xl font-semibold" data-i18n="basic.storage.title">
+                        Speicher
+                    </h3>
+                    <p class="text-gray-400 mb-6" data-i18n="basic.storage.description"></p>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" data-i18n="basic.storage.location">
+                                Datenverzeichnis
+                            </label>
+                            <div class="flex gap-3">
+                                <input
+                                        type="text"
+                                        value="./data"
+                                        class="flex-1 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" data-i18n="basic.storage.cache-size"></label>
+                            <input
+                                    type="number"
+                                    value="512"
+                                    class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3">
+                            <p class="text-sm text-gray-500 mt-2" data-i18n="basic.storage.cache-description"></p>
+                        </div>
+                    </div>
+                </section>
+                <div class="flex justify-end gap-3">
+                    <button data-target="database" class="nav-item next-page px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+                    data-i18n="basic.btn.next"></button>
+                </div>
+            </div>
+        </section>
+        <section id="database" class="page hidden" data-page="database">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold" data-i18n="database.title">
+                    Update Settings
+                </h2>
+                <p class="text-gray-500 mt-2" data-i18n="basic.description">
+                    Verwalte die grundlegenden Einstellungen von DataCat.
+                </p>
+            </div>
+
+            <div class="max-w-4xl space-y-8">
+                <section class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow">
+                    <h3 class="text-xl font-semibold mb-6" data-i18n="basic.app.title">
+                        Anwendung
+                    </h3>
+                    <div class="space-y-5">
+                        <div id="database-type-dropdown" class="dropdown relative w-full">
+                            <button
+                                    type="button"
+                                    class="dropdown-button flex w-full items-center justify-between rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 transition hover:border-blue-500">
+										<span class="dropdown-label">
+										Database Type
+										</span>
+                                <svg class="dropdown-arrow h-5 w-5 transition-transform duration-200"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor">
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu pointer-events-none absolute left-0 top-full mt-2 w-full z-50 overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg opacity-0 -translate-y-2 transition-all duration-200">
+                                <button class="dropdown-option cursor-not-allowed w-full px-4 py-3 text-left text-gray-400 transition hover:bg-gray-100 dark:hover:bg-gray-800 disabled" data-value="disabled">
+                                    Select database type
+                                </button>
+                                <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="sqlserver">
+                                    SQL Server
+                                </button>
+                                <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="mysql">
+                                    MySQL
+                                </button>
+                                <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="mariadb">
+                                    MariaDB
+                                </button>
+                                <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="postgresql">
+                                    PostreSQL (not recommended)
+                                </button>
+                                <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="other">
+                                    Something else (Installing later)
+                                </button>
+                            </div>
+                        </div>
+                        <p id="db-warning" class="text-gray-400 hidden"></p>
+                        <!-- TEXT FIELDS -->
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" for="db-host">
+                                Hostname
+                            </label>
+                            <input id="db-host"
+                                    type="text"
+                                    placeholder="localhost"
+                                    class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" for="db-port">
+                                Port
+                            </label>
+                            <input id="db-port"
+                                    type="number"
+                                    placeholder="3306"
+                                    max="65535"
+                                    min="1"
+                                    class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" for="db-username">
+                                Username
+                            </label>
+                            <input id="db-username"
+                                    type="text"
+                                    placeholder="sa"
+                                    class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" for="db-password">
+                                Password
+                            </label>
+                            <input id="db-password"
+                                    type="password"
+                                    placeholder="secret"
+                                    class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" for="db-schema">
+                                Schema Name
+                            </label>
+                            <input id="db-schema"
+                                    type="text"
+                                    placeholder="flow"
+                                    value="flow"
+                                    class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="flex items-center justify-end mt-6">
+                            <p id="test-conn-success" class="text-green-400 hidden">Connection Successful</p>
+                            <p id="test-conn-fail" class="text-red-400 hidden">Connection Failed:</p>
+                            <p id="test-conn-testing" class="hidden">Testing Connection...</p>
+                            <button class="px-6 py-3 rounded-xl ml-6 bg-red-500 text-white hover:bg-red-400 transition">Test Connection</button>
+                            <button class="px-6 py-3 ml-6 rounded-xl bg-yellow-500 text-white hover:bg-yellow-400 transition disabled">Download Driver</button>
+                        </div>
+                    </div>
+                </section>
+                <div class="flex justify-end gap-3">
+                    <button  data-target="basic"  class="nav-item px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-700 hover:bg-gray-800 transition"
+                            data-i18n="basic.btn.back">
+                        Abbrechen
+                    </button>
+                    <button data-target="security" class="nav-item next-page px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition disabled"
+                            data-i18n="basic.btn.next">
+                        Speichern
+                    </button>
+                </div>
+            </div>
+
+        </section>
+        <section id="security" class="page hidden" data-page="security">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold" data-i18n="security.title">
+                    Update Settings
+                </h2>
+                <p class="text-gray-500 mt-2" data-i18n="security.description">
+                    Verwalte die grundlegenden Einstellungen von DataCat.
+                </p>
+            </div>
+
+            <div class="max-w-4xl space-y-8">
+                <section class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow">
+                    <h3 class="text-xl font-semibold" data-i18n="security.admin.title">
+                        Anwendung
+                    </h3>
+                    <p class="text-ml text-gray-400  mb-6" data-i18n="security.admin.description"></p>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" for="admin-username">
+                                Username
+                            </label>
+                            <input id="admin-username"
+                                   type="text"
+                                   placeholder="Admin"
+                                   class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium" for="admin-password">
+                                Password
+                            </label>
+                            <input id="admin-password"
+                                   type="password"
+                                   placeholder="secret"
+                                   class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium" data-i18n="security.admin.2ndfactor">
+                                    Automatische Updates
+                                </p>
+                                <!--<p class="text-sm text-gray-500">
+                                    Neue Versionen automatisch installieren
+                                    </p>-->
+                            </div>
+                            <label class="relative inline-flex cursor-pointer">
+                                <input id="2nd-factor-enable" type="checkbox" class="sr-only peer">
+                                <div
+                                        class="w-12 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 transition">
+                                </div>
+                                <div
+                                        class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-6">
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="second-factor-options" class="hidden">
+                            <!-- PLACEHOLDER FOR 2ND FACTOR -->
+                            <h3 class="text-xl font-semibold" data-i18n="security.2ndfactor.title">
+                                Anwendung
+                            </h3>
+                        </div>
+
+                    </div>
+                </section>
+                <div class="flex justify-end gap-3">
+                    <button  data-target="database"  class="nav-item px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-700 hover:bg-gray-800 transition"
+                             data-i18n="basic.btn.back">
+                        Abbrechen
+                    </button>
+                    <button data-target="updates" class="next-page nav-item px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+                            data-i18n="basic.btn.next">
+                        Speichern
+                    </button>
+                </div>
+            </div>
+
+        </section>
+        <section id="updates" class="page hidden" data-page="updates">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold" data-i18n="updates.title">
+                    Update Settings
+                </h2>
+                <p class="text-gray-500 mt-2" data-i18n="updates.description">
+                    Verwalte die grundlegenden Einstellungen von DataCat.
+                </p>
+            </div>
+            <div class="max-w-4xl space-y-8">
+                <section class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow">
+                    <div class="space-y-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium" data-i18n="basic.app.autoUpdate">
+                                    Automatische Updates
+                                </p>
+                                <!--<p class="text-sm text-gray-500">
+                                    Neue Versionen automatisch installieren
+                                    </p>-->
+                            </div>
+                            <label class="relative inline-flex cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer" id="use-auto-update">
+                                <div
+                                        class="w-12 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 transition">
+                                </div>
+                                <div
+                                        class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-6">
+                                </div>
+                            </label>
+                        </div>
+                        <div class="flex w-full gap-4">
+                            <div class="w-auto flex-1">
+                                <label class="block mb-2 text-sm font-medium" data-i18n="basic.app.update-channel">
+                                    Sprache
+                                </label>
+                                <div id="update-channel-dropdown" class="dropdown relative w-full">
+                                    <button
+                                            type="button"
+                                            class="dropdown-button flex w-full items-center justify-between rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 transition hover:border-blue-500">
+                                            <span class="dropdown-label">
+                                            Update Channel
+                                            </span>
+                                        <svg class="dropdown-arrow h-5 w-5 transition-transform duration-200"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             fill="none"
+                                             viewBox="0 0 24 24"
+                                             stroke="currentColor">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </button>
+                                    <div class="dropdown-menu pointer-events-none absolute left-0 top-full mt-2 w-full z-50 overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg opacity-0 -translate-y-2 transition-all duration-200">
+                                        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="stable">
+                                            Stable
+                                        </button>
+                                        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="beta">
+                                            Beta
+                                        </button>
+                                        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="alpha">
+                                            Alpha
+                                        </button>
+                                        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="development">
+                                            Development
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-auto flex-1">
+                                <label class="block mb-2 text-sm font-medium" data-i18n="basic.app.update-behavior"></label>
+                                <div id="update-behavior-dropdown" class="dropdown relative w-full">
+                                    <button
+                                            type="button"
+                                            class="dropdown-button flex w-full items-center justify-between rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 transition hover:border-blue-500">
+                                            <span class="dropdown-label">
+                                            Update Behavior
+                                            </span>
+                                        <svg class="dropdown-arrow h-5 w-5 transition-transform duration-200"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             fill="none"
+                                             viewBox="0 0 24 24"
+                                             stroke="currentColor">
+                                            <path stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </button>
+                                    <div class="dropdown-menu pointer-events-none absolute left-0 top-full mt-2 w-full z-50 overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg opacity-0 -translate-y-2 transition-all duration-200">
+                                        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="auto">
+                                            Install Automatically (Patch)
+                                        </button>
+                                        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="beta">
+                                            Install Automatically (Minor)
+                                        </button>
+                                        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="alpha">
+                                            Download Automatically
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="flex justify-end gap-3">
+                    <button  data-target="security"  class="nav-item px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-700 hover:bg-gray-800 transition"
+                             data-i18n="basic.btn.back">
+                        Abbrechen
+                    </button>
+                    <button data-target="finish" class="nav-item next-page generate-report px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+                            data-i18n="basic.btn.next">
+                        Speichern
+                    </button>
+                </div>
+            </div>
+        </section>
+        <section id="finish" class="page hidden" data-page="finish">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold" data-i18n="finish.title">
+                    Update Settings
+                </h2>
+                <p class="text-gray-500 mt-2" data-i18n="finish.description">
+                    Verwalte die grundlegenden Einstellungen von DataCat.
+                </p>
+            </div>
+            <div class="max-w-4xl space-y-8">
+                <section class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow">
+                    <div class="space-y-5" id="review-section">
+                        <h3 class="text-xl font-semibold" data-i18n="basic.title"></h3>
+                    </div>
+                </section>
+                <div class="flex justify-end gap-3">
+                    <button  data-target="security"  class="nav-item px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-700 hover:bg-gray-800 transition"
+                             data-i18n="basic.btn.back">
+                        Abbrechen
+                    </button>
+                    <button data-target="finish" class="px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition" id="finish-setup"
+                            data-i18n="basic.btn.next">
+                        Speichern
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+<script src="dropdown.js" defer></script>
+<script src="index.js" defer></script>
+<script src="page.js" defer></script>
+<script src="factor.js" defer></script>
+</body>
+</html>
