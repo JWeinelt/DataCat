@@ -123,7 +123,7 @@ pipeline {
                       --main-jar DataCat.jar \
                       --main-class de.julianweinelt.datacat.DataCat \
                       --dest dist \
-                      --app-version ${MAVEN_VERSION}
+                      --app-version 1.0.0
                 '''
 
                 archiveArtifacts artifacts: 'dist/*.exe'
