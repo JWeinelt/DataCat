@@ -10,11 +10,17 @@
     </parent>
 
     <artifactId>reporter</artifactId>
+
+
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>https://repo.codeblocksmc.com/repository/maven-releases/</url>
+            <url>https://repo.codeblocksmc.com/repository/maven-releases</url>
         </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>https://repo.codeblocksmc.com/repository/maven-snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <properties>
@@ -32,7 +38,7 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.7</version>
+            <version>3.7.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->

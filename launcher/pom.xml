@@ -11,6 +11,18 @@
 
     <artifactId>launcher</artifactId>
 
+
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>https://repo.codeblocksmc.com/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>https://repo.codeblocksmc.com/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -50,7 +62,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.44</version>
+                            <version>1.18.46</version>
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
@@ -73,7 +85,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.21.2</version>
+            <version>2.22.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
@@ -85,7 +97,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.44</version>
+            <version>1.18.46</version>
             <scope>provided</scope>
         </dependency>
 
@@ -93,7 +105,7 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.6</version>
+            <version>3.7.1</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>

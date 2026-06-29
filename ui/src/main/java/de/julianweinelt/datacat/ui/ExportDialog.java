@@ -38,6 +38,7 @@ public class ExportDialog extends JDialog {
     private DbxArchiveWriter writer;
     private ADatabase database;
 
+
     public ExportDialog(Frame owner) {
         super(owner, translate("dialog.export.title"), true);
         BenchUI.addEscapeKeyBind(this);
@@ -50,7 +51,7 @@ public class ExportDialog extends JDialog {
         setModal(false);
 
         if (taskbar.isSupported(Taskbar.Feature.PROGRESS_STATE_WINDOW)) {
-            taskbar.setWindowProgressState(owner, Taskbar.State.NORMAL);
+            taskbar.setWindowProgressState(parent, Taskbar.State.INDETERMINATE);
         }
 
         add(createSettingsPanel(), BorderLayout.NORTH);
@@ -61,7 +62,7 @@ public class ExportDialog extends JDialog {
             @Override
             public void windowClosed(WindowEvent e) {
                 if (taskbar.isSupported(Taskbar.Feature.PROGRESS_STATE_WINDOW)) {
-                    taskbar.setWindowProgressState(owner, Taskbar.State.OFF);
+                    taskbar.setWindowProgressState(parent, Taskbar.State.OFF);
                 }
             }
         });
@@ -97,14 +98,14 @@ public class ExportDialog extends JDialog {
 
         new Thread(() -> {
             try {
-                DatabaseExporter exporter = new DatabaseExporter(writer, database, listener, this);
+                DatabaseExporter exporter = new DatabaseExporter(writer, database, listener, this, parent, taskbar);
                 exporter.setDatabasesToExport(databasesToExport);
                 exporter.retrieveBasicData();
                 exporter.createManifest();
                 exporter.exportData();
 
                 listener.onLog(translate("dialog.export.console.success"));
-                taskbar.setWindowProgressState(this, Taskbar.State.OFF);
+                taskbar.setWindowProgressState(parent, Taskbar.State.OFF);
             } catch (Exception e) {
                 listener.onError(translate("dialog.export.console.failed"), e);
                 log.error("Export failed", e);
@@ -324,7 +325,9 @@ public class ExportDialog extends JDialog {
 
         if (dialog.isConfirmed()) {
             databasesToExport = dialog.getSelectedNames();
-            label.setText(String.join(", ", databasesToExport));
+            String dbs = String.join(", ", databasesToExport);
+            if (dbs.length() > 20) dbs = dbs.substring(0, 17) + "...";
+            label.setText(dbs);
             updateStartButton();
         }
     }
@@ -334,13 +337,14 @@ public class ExportDialog extends JDialog {
 
             @Override
             public void onProgress(int current, int total, String message) {
+                if (total == 0) log.warn("Progress total is 0, this should not happen");
                 int percent = total == 0 ? 0 : (int) (current * 100.0 / total);
                 SwingUtilities.invokeLater(() -> {
                     progressBar.setMaximum(total);
                     progressBar.setValue(current);
                     progressBar.setString(message + " (" + current + "/" + total + ")");
-                    if (taskbar.isSupported(Taskbar.Feature.PROGRESS_VALUE)) {
-                        taskbar.setWindowProgressValue(ExportDialog.this, percent);
+                    if (taskbar.isSupported(Taskbar.Feature.PROGRESS_VALUE_WINDOW)) {
+                        taskbar.setWindowProgressValue(parent, percent);
                     }
                 });
             }
