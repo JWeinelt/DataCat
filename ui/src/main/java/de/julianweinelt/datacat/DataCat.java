@@ -13,6 +13,7 @@ import de.julianweinelt.datacat.dbx.api.Registry;
 import de.julianweinelt.datacat.dbx.api.drivers.DriverManagerService;
 import de.julianweinelt.datacat.dbx.api.events.Event;
 import de.julianweinelt.datacat.dbx.api.plugins.PluginLoader;
+import de.julianweinelt.datacat.dbx.api.plugins.YarnLoader;
 import de.julianweinelt.datacat.dbx.api.ui.UIService;
 import de.julianweinelt.datacat.dbx.util.LanguageManager;
 import de.julianweinelt.datacat.service.UpdateChecker;
@@ -72,6 +73,9 @@ public class DataCat {
     private ProjectManager projectManager;
     @Getter
     private FileManager fileManager;
+
+    @Getter
+    private YarnLoader yarnLoader;
 
     @Getter
     private UpdateChecker updateChecker;
@@ -169,6 +173,8 @@ public class DataCat {
         log.info("Starting plugin service...");
         log.info("Loading plugins...");
         pluginLoader = new PluginLoader(api);
+        yarnLoader = new YarnLoader();
+        yarnLoader.discoverYarns();
         pluginLoader.loadAll();
 
         log.info("Initializing UI...");

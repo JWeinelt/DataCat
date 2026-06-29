@@ -55,6 +55,10 @@ public class DatabaseImporter {
                 manifest.getTool().getVersion());
     }
 
+    public List<String> getDatabases() {
+        return manifest.getExport().getDatabases();
+    }
+
     public void validate() {
         listener.onLog("Validating import...");
 

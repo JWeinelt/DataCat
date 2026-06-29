@@ -34,7 +34,7 @@ public class ShortcutManager {
      * }</pre>
      */
     public void register(String name, String displayName, KeyStroke stroke) {
-        if (!name.matches("[A-Z_]")) throw new IllegalArgumentException("Name should only contain upper case alphanumerical letters and underscores.");
+        //if (!name.matches("[A-Z_]")) throw new IllegalArgumentException("Name should only contain upper case alphanumerical letters and underscores.");
         actions.add(new ShortcutAction() {
             @Override
             public KeyStroke defaultKey() {
