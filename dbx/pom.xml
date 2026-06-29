@@ -21,8 +21,12 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>https://repo.codeblocksmc.com/repository/maven-releases/</url>
+            <url>https://repo.codeblocksmc.com/repository/maven-releases</url>
         </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>https://repo.codeblocksmc.com/repository/maven-snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
@@ -36,7 +40,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.44</version>
+                            <version>1.18.46</version>
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
@@ -57,7 +61,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.44</version>
+            <version>1.18.46</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

@@ -14,6 +14,7 @@ import de.julianweinelt.datacat.dbx.api.ui.menubar.MenuBar;
 import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
 import de.julianweinelt.datacat.dbx.util.NewsFetcher;
 import de.julianweinelt.datacat.service.UpdateChecker;
+import de.julianweinelt.datacat.ui.driver.DriverManagerDialog;
 import de.julianweinelt.datacat.ui.plugins.PluginDialog;
 import de.julianweinelt.datacat.util.SecretManager;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class BenchUI {
     private MenuBar menuBar;
 
     private JPanel cardsContainer;
+    private JScrollPane cardsScroll;
 
     public void loadTheme(boolean showDialogOnError) {
         log.debug("Loading theme data...");
@@ -214,14 +216,24 @@ public class BenchUI {
     }
 
     public void updateProjectCards() {
-        cardsContainer = new JPanel();
-        cardsContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        cardsContainer.setOpaque(false);
+        if (cardsContainer == null) {
+            cardsContainer = new JPanel();
+            cardsContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+            cardsContainer.setOpaque(false);
+
+            cardsScroll = new JScrollPane(cardsContainer);
+            cardsScroll.setBorder(BorderFactory.createEmptyBorder());
+            cardsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            cardsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        }
+
+        cardsContainer.removeAll();
 
         for (Project p : ProjectManager.instance().getProjects()) {
             JPanel card = p.createCard(this);
             cardsContainer.add(card);
         }
+
         cardsContainer.revalidate();
         cardsContainer.repaint();
     }
@@ -254,11 +266,6 @@ public class BenchUI {
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         updateProjectCards();
-
-        JScrollPane cardsScroll = new JScrollPane(cardsContainer);
-        cardsScroll.setBorder(BorderFactory.createEmptyBorder());
-        cardsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        cardsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         JComponent newsPanel = createNewsPanel();
 
@@ -1015,6 +1022,7 @@ public class BenchUI {
         String id = e.get("id").asString();
         if (id.equals("file_light_edit")) createLightEdit();
         if (id.equals("file_preferences")) new SettingsDialog(frame).setVisible(true);
+        if (id.equals("file_drivers")) new DriverManagerDialog(frame).setVisible(true);
         if (id.equals("file_plugins")) new PluginDialog(frame).setVisible(true);
         if (id.equals("file_exit")) System.exit(0);
         if (id.equals("help_license")) showLicenseInfo();
