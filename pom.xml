@@ -26,8 +26,8 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-releases</id>
-            <url>https://repo.codeblocksmc.com/repository/maven-releases</url>
+            <id>julianweinelt-releases</id>
+            <url>https://repo.julianweinelt.de/releases</url>
         </repository>
         <snapshotRepository>
             <id>maven-snapshots</id>

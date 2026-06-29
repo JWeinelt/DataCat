@@ -1,7 +1,11 @@
 package de.julianweinelt.datacat.ui.driver;
 
 import de.julianweinelt.datacat.dbx.api.DbxAPI;
+import de.julianweinelt.datacat.dbx.api.drivers.DriverDownloadManager;
 import de.julianweinelt.datacat.dbx.api.drivers.DriverDownloadWrapper;
+import de.julianweinelt.datacat.dbx.api.drivers.PluginDriver;
+import de.julianweinelt.datacat.dbx.api.exceptions.NoDriverFoundException;
+import de.julianweinelt.datacat.dbx.util.LanguageManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +17,8 @@ public class DriverDownloadDialog extends JDialog {
 
     private final JComboBox<String> dbTypeBox;
     private final JComboBox<String> versionBox;
-    private final JTextArea infoArea;
 
+    @Deprecated(since = "1.0.1-beta.1", forRemoval = true)
     private final String[] mySQLVersions = {
             "9.5.0",
             "9.4.0","9.3.0","9.2.0","9.1.0","9.0.0",
@@ -43,6 +47,7 @@ public class DriverDownloadDialog extends JDialog {
             "2.0.14"
     };
 
+    @Deprecated(since = "1.0.1-beta.1", forRemoval = true)
     private final Map<String, String[]> versions = Map.of(
             "mysql", mySQLVersions,
             "mariadb", new String[]{"3.5.7", "3.4.0", "2.7.13"},
@@ -50,8 +55,7 @@ public class DriverDownloadDialog extends JDialog {
             "postgresql", new String[]{"42.7.8", "42.7.7", "42.7.6", "42.7.5", "42.7.4", "42.7.3", "42.7.1"}
     );
 
-    //TODO: Move version data to central server
-
+    @Deprecated(since = "1.0.1-beta.1", forRemoval = true)
     private String fromInternalDBName(String name) {
         return switch (name) {
             case "mysql" -> "MySQL";
@@ -61,6 +65,17 @@ public class DriverDownloadDialog extends JDialog {
             default -> name;
         };
     }
+
+
+    /**
+     * Converts the given human-readable {@link String} database name to the internal name.
+     * @param name The human-readable {@link String}
+     * @return The internal name as a {@link String}
+     *
+     * @deprecated as the human-readable Strings may be translated and DataCat is using a new driver meta system since v1.0.1-beta.1
+     * Use {@link #fromTranslatedName(String)} instead.
+     */
+    @Deprecated(since = "1.0.1-beta.1")
     private String toInternalDBName(String name) {
         return switch (name) {
             case "MySQL" -> "mysql";
@@ -69,6 +84,12 @@ public class DriverDownloadDialog extends JDialog {
             case "Postgre SQL" -> "postgresql";
             default -> name;
         };
+    }
+
+    private String fromTranslatedName(String name) {
+        String translationID = LanguageManager.instance().toId(name);
+        if (translationID == null) return null;
+        return translationID.replace("driver.database.", "").replace(".name", "");
     }
 
     public DriverDownloadDialog(Window parent, boolean modal) {
@@ -82,10 +103,10 @@ public class DriverDownloadDialog extends JDialog {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        String[] dbEngines = new String[versions.size()];
+        String[] dbEngines = new String[DriverDownloadManager.instance().registeredDriverCount()];
         int i = 0;
-        for (String s : versions.keySet()) {
-            dbEngines[i++] = fromInternalDBName(s);
+        for (String s : DriverDownloadManager.instance().registeredDriverNames()) {
+            dbEngines[i++] = LanguageManager.translate("driver.database." + s + ".name");
         }
 
         dbTypeBox = new JComboBox<>(dbEngines);
@@ -105,7 +126,7 @@ public class DriverDownloadDialog extends JDialog {
 
         add(formPanel, BorderLayout.NORTH);
 
-        infoArea = new JTextArea();
+        JTextArea infoArea = new JTextArea();
         infoArea.setEditable(false);
         infoArea.setLineWrap(true);
         infoArea.setWrapStyleWord(true);
@@ -123,7 +144,7 @@ public class DriverDownloadDialog extends JDialog {
         buttonPanel.add(downloadButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        updateVersions();
+        //updateVersions();
         dbTypeBox.addActionListener(e -> updateVersions());
 
         cancelButton.addActionListener(e -> {
@@ -136,8 +157,14 @@ public class DriverDownloadDialog extends JDialog {
             if (db == null) return;
             String version = (String) versionBox.getSelectedItem();
 
-            DriverDownloadWrapper.DriverDownload driverDownload = DriverDownloadWrapper.getForDB(toInternalDBName(db), version);
-            if (driverDownload == null) return;
+            PluginDriver pluginDriver = DriverDownloadManager.instance().byName(fromTranslatedName(db));
+
+            if (pluginDriver == null) return;
+
+            DriverDownloadWrapper.DriverDownload driverDownload =
+                    new DriverDownloadWrapper.DriverDownload(pluginDriver.downloadURL(version),
+                            pluginDriver.isZippedFile(), pluginDriver.getInternalName()
+                            + (pluginDriver.isZippedFile() ? "." + pluginDriver.archiveType() : ".jar"));
 
             new DriverDownloadProgressDialog(this, driverDownload.url(), DbxAPI.driversFolder(),
                     driverDownload, db, version).setVisible(true);
@@ -145,12 +172,13 @@ public class DriverDownloadDialog extends JDialog {
     }
 
     private void updateVersions() {
-        versionBox.removeAllItems();
         String selectedDb = (String) dbTypeBox.getSelectedItem();
+        PluginDriver d = DriverDownloadManager.instance().byName(fromTranslatedName(selectedDb));
+        if (d == null) throw new NoDriverFoundException(selectedDb);
+        d.defineVersionsASync().join();
+        versionBox.removeAllItems();
         if (selectedDb != null) {
-            for (String v : versions.get(toInternalDBName(selectedDb))) {
-                versionBox.addItem(v);
-            }
+            d.getAvailableVersions().forEach(v -> versionBox.addItem(v.versionName()));
         }
     }
 }

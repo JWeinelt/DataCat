@@ -31,6 +31,14 @@ public class KeyManager {
             log.error(e.getMessage(), e);
         }
     }
+
+    public static String generateRandomKey() {
+        StringBuilder sb = new StringBuilder(100);
+        for (int i = 0; i < 100; i++) {
+            sb.append(CHARSET.charAt(RANDOM.nextInt(CHARSET.length())));
+        }
+        return sb.toString();
+    }
     public static boolean checkKey(String key) {
         try {
             String k = Files.readString(new File("key.txt").toPath());

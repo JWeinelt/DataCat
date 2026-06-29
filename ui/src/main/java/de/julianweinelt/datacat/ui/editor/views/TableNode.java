@@ -17,6 +17,8 @@ public class TableNode extends JPanel {
     private final JTable columnTable;
     private final List<String> columns;
 
+    private QueryModel queryModel;
+
     public TableNode(String tableName, String alias, List<String> columns,
                      QueryModel queryModel) {
         this.tableName = tableName;
@@ -52,6 +54,11 @@ public class TableNode extends JPanel {
     private void enableDragging() {
         MouseAdapter adapter = new MouseAdapter() {
             Point offset;
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                queryModel.setSelectedNode(TableNode.this);
+            }
 
             @Override
             public void mousePressed(MouseEvent e) {

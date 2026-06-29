@@ -46,7 +46,7 @@ public final class PluginScanner {
                     String json = new String(in.readAllBytes(), StandardCharsets.UTF_8);
                     PluginConfiguration config = new Gson().fromJson(json, PluginConfiguration.class);
                     if (config.pluginName().equalsIgnoreCase("system")) {
-                        log.warn("Found a potentially malicious plugin, which trys to pretend it's the system plugin.");
+                        log.warn("Found a potentially malicious plugin, which trys to pretend it's the system-internal plugin.");
                         log.warn("Plugin path: {}", jar.getPath());
                         continue;
                     }
