@@ -52,6 +52,7 @@ public class ProjectManager {
             JOptionPane.showMessageDialog(ui.getFrame(), "Failed to delete the project \"" + project.getName()
                     + "\".\n\nPlease check if you have the permission to do that.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        projects.remove(project);
     }
 
     public boolean loadAllProjects(String password) {
