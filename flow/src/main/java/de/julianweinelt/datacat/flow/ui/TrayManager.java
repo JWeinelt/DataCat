@@ -43,7 +43,7 @@ public class TrayManager {
             }
 
             InputStream stream = Flow.class
-                    .getResourceAsStream("/icon.png");
+                    .getResourceAsStream("/logo.png");
 
             if (stream == null) {
                 throw new RuntimeException("Icon not found in classpath");
