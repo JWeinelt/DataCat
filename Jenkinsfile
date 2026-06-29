@@ -106,6 +106,44 @@ pipeline {
             }
         }
 
+        stage('Build Flow') {
+            agent { label 'Linux-Build' }
+
+            steps {
+                sh './mvnw -pl flow -am clean package -DskipTests'
+            }
+        }
+
+        stage('Build Server') {
+            agent { label 'Linux-Build' }
+
+            steps {
+                sh './mvnw -pl server -am clean package -DskipTests'
+            }
+        }
+
+        stage('Build Launcher') {
+            agent { label 'Linux-Build' }
+
+            steps {
+                sh './mvnw -pl launcher -am clean package -DskipTests'
+            }
+        }
+
+        stage('Archive Snapshot Jars') {
+            when {
+                expression {
+                    params.BUILD_TYPE == 'SNAPSHOT'
+                }
+            }
+
+            agent { label 'Linux-Build' }
+
+            steps {
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            }
+        }
+
         stage('Create Linux App Image') {
             when {
                 anyOf {
