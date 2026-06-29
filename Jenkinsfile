@@ -6,8 +6,17 @@ pipeline {
         disableConcurrentBuilds()
     }
 
+    parameters {
+        choice(
+            name: 'BUILD_TYPE',
+            choices: ['SNAPSHOT', 'BETA', 'RELEASE'],
+            description: 'Type of build'
+        )
+    }
+
     environment {
         MAVEN_VERSION = ''
+        APP_VERSION = ''
     }
 
     stages {
@@ -50,60 +59,102 @@ pipeline {
         }
 
         stage('Read Maven Version') {
-             agent { label 'Linux-Build' }
+            agent { label 'Linux-Build' }
 
-             steps {
-                 script {
-                     env.MAVEN_VERSION = sh(
-                         script: "./mvnw help:evaluate -Dexpression='project.version' -q -DforceStdout",
-                         returnStdout: true
-                     ).trim()
+            steps {
+                script {
+                    env.MAVEN_VERSION = sh(
+                        script: "./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout",
+                        returnStdout: true
+                    ).trim()
 
-                     echo "Building version ${env.MAVEN_VERSION}"
-                 }
-             }
-         }
+                    echo "Maven Version: ${env.MAVEN_VERSION}"
+                }
+            }
+        }
+
+        stage('Prepare Version') {
+            agent { label 'Linux-Build' }
+
+            steps {
+                script {
+                    switch (params.BUILD_TYPE) {
+                        case "RELEASE":
+                            env.APP_VERSION = env.MAVEN_VERSION
+                            break
+
+                        case "BETA":
+                            env.APP_VERSION = "${env.MAVEN_VERSION}-beta"
+                            break
+
+                        default:
+                            env.APP_VERSION = "${env.MAVEN_VERSION}-SNAPSHOT-${env.BUILD_NUMBER}"
+                            break
+                    }
+
+                    echo "Build Type : ${params.BUILD_TYPE}"
+                    echo "App Version: ${env.APP_VERSION}"
+                }
+            }
+        }
 
         stage('Build UI') {
             agent { label 'Linux-Build' }
+
             steps {
                 sh './mvnw -pl ui -am clean package -DskipTests'
             }
         }
+
         stage('Create Linux App Image') {
+            when {
+                anyOf {
+                    expression { params.BUILD_TYPE == 'BETA' }
+                    expression { params.BUILD_TYPE == 'RELEASE' }
+                }
+            }
+
             agent { label 'Linux-Build' }
-        
+
             steps {
                 cleanWs()
-        
+
                 checkout scm
-        
+
                 sh 'chmod +x mvnw'
-        
+
                 sh './mvnw -pl ui -am clean package -DskipTests'
-        
-                sh '''
+
+                sh """
                     rm -rf dist
-        
-                jpackage \
-                  --type app-image \
-                  --name DataCat \
-                  --input ui/target \
-                  --main-jar DataCat.jar \
-                  --main-class de.julianweinelt.datacat.DataCat \
-                  --dest dist \
-                  --app-version 1.0.0
-                '''
-                
-                sh '''
+
+                    jpackage \
+                      --type app-image \
+                      --name DataCat \
+                      --input ui/target \
+                      --main-jar DataCat.jar \
+                      --main-class de.julianweinelt.datacat.DataCat \
+                      --dest dist \
+                      --app-version ${env.APP_VERSION}
+                """
+
+                sh """
                     cd dist
                     tar -czf DataCat-linux.tar.gz DataCat
-                '''
+                """
 
                 archiveArtifacts artifacts: 'dist/DataCat-linux.tar.gz'
             }
         }
+
         stage('Create Windows Exe') {
+            when {
+                anyOf {
+                    expression { params.BUILD_TYPE == 'BETA' }
+                    expression { params.BUILD_TYPE == 'RELEASE' }
+                }
+            }
+
             agent { label 'windows-build' }
 
             steps {
@@ -111,20 +162,20 @@ pipeline {
 
                 checkout scm
 
-                sh './mvnw -pl ui -am clean package -DskipTests'
+                bat 'mvnw.cmd -pl ui -am clean package -DskipTests'
 
-                sh '''
-                    rm -rf dist
+                bat """
+                    if exist dist rmdir /S /Q dist
 
-                    jpackage \
-                      --type exe \
-                      --name DataCat \
-                      --input ui/target \
-                      --main-jar DataCat.jar \
-                      --main-class de.julianweinelt.datacat.DataCat \
-                      --dest dist \
-                      --app-version 1.0.0
-                '''
+                    jpackage ^
+                      --type exe ^
+                      --name DataCat ^
+                      --input ui\\target ^
+                      --main-jar DataCat.jar ^
+                      --main-class de.julianweinelt.datacat.DataCat ^
+                      --dest dist ^
+                      --app-version ${env.APP_VERSION}
+                """
 
                 archiveArtifacts artifacts: 'dist/*.exe'
             }
@@ -143,7 +194,8 @@ pipeline {
         }
 
         success {
-            echo 'Build successful'
+            echo "Build successful (${params.BUILD_TYPE})"
+            echo "Version: ${env.APP_VERSION}"
         }
 
         failure {
