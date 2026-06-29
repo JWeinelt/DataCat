@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>dbx</artifactId>
+    <version>1.0.2</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,12 +21,12 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-releases</id>
-            <url>https://repo.codeblocksmc.com/repository/maven-releases</url>
+            <id>julianweinelt-releases</id>
+            <url>https://repo.julianweinelt.de/releases</url>
         </repository>
         <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>https://repo.codeblocksmc.com/repository/maven-snapshots</url>
+            <id>julianweinelt-snapshots</id>
+            <url>https://repo.julianweinelt.de/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
