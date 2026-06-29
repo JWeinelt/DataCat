@@ -85,14 +85,14 @@ pipeline {
                 sh '''
                     rm -rf dist
         
-                    jpackage \
-                      --type app-image \
-                      --name DataCat \
-                      --input ui/target \
-                      --main-jar DataCat.jar \
-                      --main-class de.julianweinelt.datacat.DataCat \
-                      --dest dist \
-                      --app-version ${MAVEN_VERSION}
+                jpackage \
+                  --type app-image \
+                  --name DataCat \
+                  --input ui/target \
+                  --main-jar DataCat.jar \
+                  --main-class de.julianweinelt.datacat.DataCat \
+                  --dest dist \
+                  --app-version 1.0.0
                 '''
                 
                 sh '''
