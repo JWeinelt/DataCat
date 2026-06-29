@@ -1,0 +1,89 @@
+<div class="max-w-4xl space-y-8">
+    <section class="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow">
+        <h3 class="text-xl font-semibold mb-6" data-i18n="basic.app.title">
+            Anwendung
+        </h3>
+        <div class="space-y-5">
+            <div id="database-type-dropdown" class="dropdown relative w-full">
+                <button
+                        type="button"
+                        class="dropdown-button flex w-full items-center justify-between rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 transition hover:border-blue-500">
+										<span class="dropdown-label">
+										Database Type
+										</span>
+                    <svg class="dropdown-arrow h-5 w-5 transition-transform duration-200"
+                         xmlns="http://www.w3.org/2000/svg"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu pointer-events-none absolute left-0 top-full mt-2 w-full z-50 overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg opacity-0 -translate-y-2 transition-all duration-200">
+                    <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="sqlserver">
+                        SQL Server
+                    </button>
+                    <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="mysql">
+                        MySQL
+                    </button>
+                    <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="mariadb">
+                        MariaDB
+                    </button>
+                    <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="postgresql">
+                        PostreSQL (not recommended)
+                    </button>
+                </div>
+            </div>
+            <!-- TEXT FIELDS -->
+            <div>
+                <label class="block mb-2 text-sm font-medium">
+                    Hostname
+                </label>
+                <input
+                        type="text"
+                        placeholder="localhost"
+                        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <div>
+                <label class="block mb-2 text-sm font-medium">
+                    Port
+                </label>
+                <input
+                        type="number"
+                        placeholder="3306"
+                        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <div>
+                <label class="block mb-2 text-sm font-medium">
+                    Username
+                </label>
+                <input
+                        type="text"
+                        placeholder="sa"
+                        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <div>
+                <label class="block mb-2 text-sm font-medium">
+                    Password
+                </label>
+                <input
+                        type="password"
+                        placeholder="secret"
+                        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+        </div>
+    </section>
+    <div class="flex justify-end gap-3">
+        <button class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-700 hover:bg-gray-800 transition"
+                data-i18n="basic.btn.cancel">
+            Abbrechen
+        </button>
+        <button data-target="database" class="nav-item px-6 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+                data-i18n="basic.btn.next">
+            Speichern
+        </button>
+    </div>
+</div>
