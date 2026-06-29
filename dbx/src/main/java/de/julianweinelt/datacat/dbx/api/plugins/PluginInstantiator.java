@@ -25,7 +25,7 @@ public final class PluginInstantiator {
         String className = descriptor.config().mainClass();
         Class<?> clazz = Class.forName(className, true, loader);
         if (!DbxPlugin.class.isAssignableFrom(clazz)) {
-            throw new PluginInvalidException("Main class must extend CPlugin or implement the CPlugin interface.");
+            throw new PluginInvalidException("Main class must extend the class DbxPlugin.");
         }
 
         DbxPlugin plugin = (DbxPlugin) clazz.getDeclaredConstructor().newInstance();

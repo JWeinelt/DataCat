@@ -1,9 +1,7 @@
 package de.julianweinelt.datacat.flow.setup;
 
 import de.julianweinelt.datacat.dbx.api.DbxAPI;
-import de.julianweinelt.datacat.dbx.api.drivers.DriverDownloadWrapper;
-import de.julianweinelt.datacat.dbx.api.drivers.DriverDownloader;
-import de.julianweinelt.datacat.dbx.api.drivers.DriverManagerService;
+import de.julianweinelt.datacat.dbx.api.drivers.*;
 import de.julianweinelt.datacat.dbx.database.DatabaseMetaData;
 import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
 import de.julianweinelt.datacat.flow.Flow;
@@ -73,18 +71,20 @@ public class SetupManager {
         clearScreen();
         if (!new File(DbxAPI.driversFolder(), databaseType.toLowerCase() + ".jar").exists()) {
             log.info("Downloading driver for {}...", databaseType);
-            DriverDownloader.download(databaseType.toLowerCase(), DriverDownloadWrapper.latestVersion(databaseType.toLowerCase())).join();
-            log.info("Driver downloaded successfully!");
-            log.info("Registering downloaded file...");
-            try {
-                DriverManagerService.instance().preloadDrivers();
-            } catch (Exception e) {
-                log.error("Failed to register driver: {}", e.getMessage());
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ignored) {
-            }
+            PluginDriver driver = DriverDownloadManager.instance().byName(databaseType.toLowerCase());
+            if (driver == null) return;
+
+            driver.latestVersion().thenAccept(version -> {
+                DriverDownloader.download(databaseType.toLowerCase(), version).join();
+                log.info("Driver downloaded successfully!");
+                log.info("Registering downloaded file...");
+                try {
+                    DriverManagerService.instance().preloadDrivers();
+                } catch (Exception e) {
+                    log.error("Failed to register driver: {}", e.getMessage());
+                }
+                try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+            });
         } else {
             log.info("Driver for {} is already installed!", databaseType);
         }
