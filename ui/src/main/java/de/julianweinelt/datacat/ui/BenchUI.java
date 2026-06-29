@@ -14,6 +14,7 @@ import de.julianweinelt.datacat.dbx.api.ui.menubar.MenuBar;
 import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
 import de.julianweinelt.datacat.dbx.util.NewsFetcher;
 import de.julianweinelt.datacat.service.UpdateChecker;
+import de.julianweinelt.datacat.ui.driver.DriverManagerDialog;
 import de.julianweinelt.datacat.ui.plugins.PluginDialog;
 import de.julianweinelt.datacat.util.SecretManager;
 import lombok.Getter;
@@ -1015,6 +1016,7 @@ public class BenchUI {
         String id = e.get("id").asString();
         if (id.equals("file_light_edit")) createLightEdit();
         if (id.equals("file_preferences")) new SettingsDialog(frame).setVisible(true);
+        if (id.equals("file_drivers")) new DriverManagerDialog(frame).setVisible(true);
         if (id.equals("file_plugins")) new PluginDialog(frame).setVisible(true);
         if (id.equals("file_exit")) System.exit(0);
         if (id.equals("help_license")) showLicenseInfo();

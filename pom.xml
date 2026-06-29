@@ -26,8 +26,8 @@
 
     <distributionManagement>
         <repository>
-            <id>codeblocksmc-release</id>
-            <url>https://repo.codeblocksmc.com/repository/codeblocksmc-release/</url>
+            <id>julianweinelt-releases</id>
+            <url>https://repo.julianweinelt.de/releases</url>
         </repository>
     </distributionManagement>
 

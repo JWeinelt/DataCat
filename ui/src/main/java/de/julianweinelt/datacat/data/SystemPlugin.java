@@ -93,6 +93,7 @@ public final class SystemPlugin extends DbxPlugin {
                 .child(new MenuItem(translate("menu.cat.file.lightEdit"), "file_light_edit"))
                 .separator()
                 .child(new MenuItem(translate("menu.cat.edit.preferences"), "file_preferences").shortcut("PREFERENCES"))
+                .child(new MenuItem(translate("menu.cat.sql.drivers"), "file_drivers"))
                 .child(new MenuItem(translate("menu.cat.edit.plugins"), "file_plugins"))
                 .child(new MenuItem(translate("menu.cat.edit.restart"), "file_restart"))
                 .child(new MenuItem(translate("menu.cat.edit.exit"), "file_exit"))

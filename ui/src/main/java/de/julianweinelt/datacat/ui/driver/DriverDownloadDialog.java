@@ -144,7 +144,7 @@ public class DriverDownloadDialog extends JDialog {
         buttonPanel.add(downloadButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        updateVersions();
+        //updateVersions();
         dbTypeBox.addActionListener(e -> updateVersions());
 
         cancelButton.addActionListener(e -> {
