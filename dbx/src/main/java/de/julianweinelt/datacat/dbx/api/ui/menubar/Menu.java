@@ -25,7 +25,7 @@ public final class Menu extends MenuComponent<JMenu> {
      * @param categoryName The internal name of the menu. Only alphanumerical lower case letters and underscores are allowed.
      */
     public Menu(String name, String categoryName) {
-        if (!categoryName.matches("[a-z_]")) throw new IllegalArgumentException("Category can only contain lower case letters and underscores.");
+        //if (!categoryName.matches("[a-z_]")) throw new IllegalArgumentException("Category can only contain lower case letters and underscores.");
         this.categoryName = categoryName;
         this.name = name;
     }
@@ -37,7 +37,7 @@ public final class Menu extends MenuComponent<JMenu> {
      * @param priority The display priority. Must be below 900 to not conflict with the default menu.
      */
     public Menu(String name, String categoryName, int priority) {
-        if (!categoryName.matches("[a-z_]")) throw new IllegalArgumentException("Category can only contain lower case letters and underscores.");
+        //if (!categoryName.matches("[a-z_]")) throw new IllegalArgumentException("Category can only contain lower case letters and underscores.");
         this.categoryName = categoryName;
         this.name = name;
         priority(priority);

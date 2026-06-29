@@ -67,8 +67,8 @@ public class CreateTableTab implements IEditorTab {
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
 
-        JButton applyButton = new JButton("💾 " + (existingTable ? "Apply" : "Create"));
-        JButton revertButton = new JButton("❌ Revert");
+        JButton applyButton = new JButton((existingTable ? "Apply" : "Create"));
+        JButton revertButton = new JButton("Revert");
         JButton newCol = new JButton("+");
         JButton remCol = new JButton("-");
 

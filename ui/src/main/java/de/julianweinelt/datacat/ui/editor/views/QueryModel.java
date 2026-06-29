@@ -1,6 +1,7 @@
 package de.julianweinelt.datacat.ui.editor.views;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
@@ -9,6 +10,9 @@ public class QueryModel {
     private final Map<String, SelectedColumn> selectedColumns = new LinkedHashMap<>();
     @Getter
     private final List<SelectedColumnGridModel> gridModels = new ArrayList<>();
+
+    @Getter @Setter
+    private TableNode selectedNode = null;
 
     public void selectColumn(String tableAlias, String tableName, String column) {
         String key = tableAlias + "." + column;

@@ -1,0 +1,24 @@
+<div id="example-dropdown" class="dropdown relative w-full">
+    <button
+            type="button"
+            class="dropdown-button flex w-full items-center justify-between rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent px-4 py-3 transition hover:border-blue-500">
+										<span class="dropdown-label">
+										Auswahl
+										</span>
+        <svg class="dropdown-arrow h-5 w-5 transition-transform duration-200"
+             xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"/>
+        </svg>
+    </button>
+    <div class="dropdown-menu pointer-events-none absolute left-0 top-full mt-2 w-full z-50 overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg opacity-0 -translate-y-2 transition-all duration-200">
+        <button class="dropdown-option w-full px-4 py-3 text-left transition hover:bg-gray-100 dark:hover:bg-gray-800" data-value="option1">
+            Option 1
+        </button>
+    </div>
+</div>
