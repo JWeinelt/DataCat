@@ -2,6 +2,11 @@ package de.julianweinelt.datacat.server;
 
 import de.julianweinelt.datacat.server.server.WebServer;
 import de.julianweinelt.datacat.server.store.StoreServer;
+import de.julianweinelt.datacat.server.store.account.AccountManager;
+import de.julianweinelt.datacat.server.store.database.DBStorage;
+import de.julianweinelt.datacat.server.store.files.Configuration;
+import de.julianweinelt.datacat.server.store.files.LocalStorage;
+import de.julianweinelt.datacat.server.util.JWTUtil;
 import lombok.Getter;
 
 import java.io.File;
@@ -23,14 +28,28 @@ public class Server {
 
     public void start() {
         KeyManager.generateKey(false);
+
+        new LocalStorage();
+        if (Configuration.instance().getJwtSecret() == null) {
+            Configuration.instance().setJwtSecret(KeyManager.generateRandomKey());
+            LocalStorage.instance().saveConfig();
+        }
+        new JWTUtil(Configuration.instance().getJwtSecret());
+
         prepareDirs();
 
         versionManager = new VersionManager();
         versionManager.load();
         versionManager.loadLatestVersions();
 
+        new DBStorage();
+        DBStorage.instance().loadMetaData();
+
+        new AccountManager();
+
         webServer = new WebServer();
         webServer.start();
+
 
         new StoreServer().start();
 

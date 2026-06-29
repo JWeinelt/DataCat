@@ -5,6 +5,7 @@ import de.julianweinelt.datacat.dbx.model.Manifest;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,12 +27,17 @@ public class DatabaseExporter {
 
     private int totalSteps;
     private int currentStep;
+    private final Taskbar taskbar;
+    private final Frame stateParent;
 
-    public DatabaseExporter(DbxArchiveWriter archiveWriter, ADatabase database, ExportListener listener, JDialog parent) {
+    public DatabaseExporter(DbxArchiveWriter archiveWriter, ADatabase database, ExportListener listener,
+                            JDialog parent, Frame stateParent, Taskbar taskbar) {
         this.archiveWriter = archiveWriter;
+        this.stateParent = stateParent;
         this.database = database;
         this.listener = listener;
         this.parent = parent;
+        this.taskbar = taskbar;
     }
 
     public void setDatabasesToExport(List<String> dbs) {
@@ -56,6 +62,7 @@ public class DatabaseExporter {
         currentStep = 0;
 
         listener.onLog("Total export steps: " + totalSteps);
+        taskbar.setWindowProgressState(stateParent, Taskbar.State.NORMAL);
     }
 
 
