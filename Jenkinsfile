@@ -78,7 +78,17 @@ pipeline {
 
             steps {
                 script {
-                    switch (params.BUILD_TYPE) {
+                    def buildType = params.BUILD_TYPE ?: 'SNAPSHOT'
+
+                    if (env.CHANGE_ID) {
+                        buildType = 'SNAPSHOT'
+                    }
+
+                    if (env.BRANCH_NAME == 'main') {
+                        buildType = 'SNAPSHOT'
+                    }
+
+                    switch (buildType) {
                         case "RELEASE":
                             env.APP_VERSION = env.MAVEN_VERSION
                             break
@@ -92,8 +102,7 @@ pipeline {
                             break
                     }
 
-                    echo "Build Type : ${params.BUILD_TYPE}"
-                    echo "App Version: ${env.APP_VERSION}"
+                    echo "Build Type: ${buildType}"
                 }
             }
         }
