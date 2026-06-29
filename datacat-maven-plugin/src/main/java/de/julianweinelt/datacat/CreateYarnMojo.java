@@ -7,9 +7,7 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.artifact.Artifact;
@@ -22,12 +20,15 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-@Mojo(name = "createyarn")
+@Mojo(name = "createyarn", defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution =  ResolutionScope.RUNTIME)
 public class CreateYarnMojo extends AbstractMojo {
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
+
+    @Parameter(property = "datacat.includeProjectJar", defaultValue = "false")
+    private boolean includeProjectJar;
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
@@ -57,6 +58,7 @@ public class CreateYarnMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}", property = "datacat.outputDirectory")
     private File outputDirectory;
 
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("=== DataCat: Creating .yarn package ===");
@@ -72,6 +74,21 @@ public class CreateYarnMojo extends AbstractMojo {
 
             addMetaJsonPlaceholder(zip);
             addPluginIcon(zip);
+
+            if (includeProjectJar) {
+                File projectJar = new File(
+                        project.getBuild().getDirectory(),
+                        project.getBuild().getFinalName() + ".jar"
+                );
+
+                if (!projectJar.exists()) {
+                    throw new MojoExecutionException(
+                            "Project JAR not found: " + projectJar.getAbsolutePath()
+                    );
+                }
+
+                addFileToZip(zip, projectJar, "datacat/" + projectJar.getName());
+            }
 
             if (themes != null && !themes.isEmpty()) {
                 getLog().info("Packaging " + themes.size() + " theme(s)...");

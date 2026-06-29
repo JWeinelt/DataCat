@@ -11,6 +11,7 @@
 
     <name>DataCat Maven Plugin</name>
     <description>Maven Plugin to .yarn packages for DataCat</description>
+    <version>1.0.4</version>
 
     <artifactId>datacat-maven-plugin</artifactId>
 
@@ -18,12 +19,12 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-releases</id>
-            <url>https://repo.codeblocksmc.com/repository/maven-releases</url>
+            <id>julianweinelt-releases</id>
+            <url>https://repo.julianweinelt.de/releases</url>
         </repository>
         <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>https://repo.codeblocksmc.com/repository/maven-snapshots</url>
+            <id>julianweinelt-snapshots</id>
+            <url>https://repo.julianweinelt.de/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -73,6 +74,12 @@
             <artifactId>maven-resolver-api</artifactId>
             <version>1.9.13</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.13.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
