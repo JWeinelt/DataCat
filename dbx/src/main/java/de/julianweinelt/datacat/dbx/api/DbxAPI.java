@@ -5,10 +5,8 @@ import de.julianweinelt.datacat.dbx.api.plugins.DbxPlugin;
 import de.julianweinelt.datacat.dbx.api.ui.UIService;
 import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
 import de.julianweinelt.datacat.dbx.database.providers.DBMetaMSSQL;
-import de.julianweinelt.datacat.dbx.database.providers.DBMetaMariaDB;
 import de.julianweinelt.datacat.dbx.database.providers.DBMetaMySQL;
 import de.julianweinelt.datacat.dbx.database.providers.db.DBMSSQL;
-import de.julianweinelt.datacat.dbx.database.providers.db.DBMariaDB;
 import de.julianweinelt.datacat.dbx.database.providers.db.DBMySQL;
 import de.julianweinelt.datacat.dbx.util.DatabaseType;
 import de.julianweinelt.datacat.dbx.util.HomeDirectories;
@@ -77,7 +75,6 @@ public class DbxAPI {
         log.info("Registering database handlers...");
         DatabaseRegistry.instance().registerMapping("mysql", DBMySQL::new, new DBMetaMySQL());
         DatabaseRegistry.instance().registerMapping("mssql", DBMSSQL::new, new DBMetaMSSQL());
-        DatabaseRegistry.instance().registerMapping("mariadb", DBMariaDB::new, new DBMetaMariaDB());
     }
 
     // API Methods
