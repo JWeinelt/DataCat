@@ -60,11 +60,6 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>de.julianweinelt.datacat</groupId>
-            <artifactId>dbx</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- For logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -144,6 +139,12 @@
             <groupId>com.github.javakeyring</groupId>
             <artifactId>java-keyring</artifactId>
             <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>de.julianweinelt.datacat</groupId>
+            <artifactId>dbx</artifactId>
+            <version>1.0.5</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
