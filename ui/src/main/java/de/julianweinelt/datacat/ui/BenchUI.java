@@ -2,13 +2,12 @@ package de.julianweinelt.datacat.ui;
 
 import de.julianweinelt.datacat.DataCat;
 import de.julianweinelt.datacat.api.DConnection;
-import de.julianweinelt.datacat.data.ConfigManager;
-import de.julianweinelt.datacat.data.Configuration;
-import de.julianweinelt.datacat.data.Project;
-import de.julianweinelt.datacat.data.ProjectManager;
+import de.julianweinelt.datacat.data.*;
 import de.julianweinelt.datacat.dbx.api.Registry;
 import de.julianweinelt.datacat.dbx.api.events.Event;
 import de.julianweinelt.datacat.dbx.api.events.Subscribe;
+import de.julianweinelt.datacat.dbx.api.nativelib.NativeLibrary;
+import de.julianweinelt.datacat.dbx.api.plugins.DbxPlugin;
 import de.julianweinelt.datacat.dbx.api.ui.ShortcutManager;
 import de.julianweinelt.datacat.dbx.api.ui.menubar.MenuBar;
 import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
@@ -1031,5 +1030,13 @@ public class BenchUI {
 
         if (id.equals("edit_export")) new ExportDialog(frame).setVisible(true);
         if (id.equals("edit_import")) new ImportDialog(frame).setVisible(true);
+    }
+
+    @Subscribe(value = "NativeLibraryRequestEvent")
+    public void onNativeLibraryRequest(Event e) {
+        DbxPlugin source = e.get("source").asValue(DbxPlugin.class);
+        NativeLibrary library = e.get("library").asValue(NativeLibrary.class);
+
+
     }
 }
