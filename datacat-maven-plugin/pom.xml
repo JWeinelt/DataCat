@@ -10,8 +10,8 @@
     </parent>
 
     <name>DataCat Maven Plugin</name>
-    <description>Maven Plugin to .yarn packages for DataCat</description>
-    <version>1.0.4</version>
+    <description>Maven Plugin to create .yarn packages for DataCat</description>
+    <version>1.1.1</version>
 
     <artifactId>datacat-maven-plugin</artifactId>
 
@@ -42,6 +42,12 @@
             <artifactId>maven-plugin-api</artifactId>
             <version>${maven.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.julianweinelt.datacat</groupId>
+            <artifactId>dbx</artifactId>
+            <version>1.0.3</version>
         </dependency>
 
         <!-- Maven Plugin Annotations -->
