@@ -2,7 +2,10 @@ package de.julianweinelt.datacat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import de.julianweinelt.datacat.dbx.api.plugins.yarn.FileManifest;
+import de.julianweinelt.datacat.dbx.api.plugins.yarn.YarnManifest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -88,7 +91,12 @@ public class CreateYarnMojo extends AbstractMojo {
                 }
 
                 addFileToZip(zip, projectJar, "datacat/" + projectJar.getName());
+                addPluginJson(zip);
+                //plugins.add(projectJar.getName());
             }
+
+            addFileManifest(zip);
+            addYarnManifest(zip);
 
             if (themes != null && !themes.isEmpty()) {
                 getLog().info("Packaging " + themes.size() + " theme(s)...");
@@ -111,7 +119,7 @@ public class CreateYarnMojo extends AbstractMojo {
             }
 
             if (libraries != null && !libraries.isEmpty()) {
-                getLog().info("Resolving and packaging " + libraries.size() + " librar(y/ies)...");
+                getLog().info("Resolving and packaging " + libraries.size() + " library/ies...");
                 for (LibraryDefinition lib : libraries) {
                     File jar = resolveLibrary(lib);
                     addFileToZip(zip, jar, "plugins/" + jar.getName());
@@ -138,6 +146,30 @@ public class CreateYarnMojo extends AbstractMojo {
         o.add("plugins", GSON.toJsonTree(plugins));
 
         zip.write(o.toString().getBytes(StandardCharsets.UTF_8));
+        zip.closeEntry();
+    }
+
+    private void addPluginJson(ZipOutputStream zip) throws IOException {
+        zip.putNextEntry(new ZipEntry("plugin.json"));
+        JsonArray a = new JsonArray();
+        JsonObject o = new JsonObject();
+        o.addProperty("name", project.getName());
+        o.addProperty("version", project.getVersion());
+        a.add(o);
+        zip.write(a.toString().getBytes(StandardCharsets.UTF_8));
+        zip.closeEntry();
+    }
+
+    private void addFileManifest(ZipOutputStream zip) throws IOException {
+        zip.putNextEntry(new ZipEntry("manifest.json"));
+        FileManifest manifest = new FileManifest("1", "", "na");
+        zip.write(GSON.toJson(manifest).getBytes(StandardCharsets.UTF_8));
+        zip.closeEntry();
+    }
+    private void addYarnManifest(ZipOutputStream zip) throws IOException {
+        zip.putNextEntry(new ZipEntry("yarn.json"));
+        YarnManifest manifest = new YarnManifest(outputName, version, version);
+        zip.write(GSON.toJson(manifest).getBytes(StandardCharsets.UTF_8));
         zip.closeEntry();
     }
 
