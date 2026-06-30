@@ -1,6 +1,7 @@
 package de.julianweinelt.datacat.dbx.api.drivers;
 
 import de.julianweinelt.datacat.dbx.api.VersionStatus;
+import de.julianweinelt.datacat.dbx.util.LanguageManager;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
@@ -104,4 +105,9 @@ public abstract class PluginDriver {
         availableVersions.add(new DriverVersion(versionName, semantic, status));
     }
 
+
+    @Override
+    public String toString() {
+        return LanguageManager.translate("driver.database." + internalName + ".name");
+    }
 }
