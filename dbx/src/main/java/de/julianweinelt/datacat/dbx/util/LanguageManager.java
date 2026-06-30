@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import de.julianweinelt.datacat.dbx.api.Registry;
 import de.julianweinelt.datacat.dbx.api.events.Event;
 import de.julianweinelt.datacat.dbx.api.events.Subscribe;
+import de.julianweinelt.datacat.dbx.api.plugins.DbxPlugin;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,10 +62,25 @@ public final class LanguageManager {
                 l = "en_us";
                 data = loadLocale(l);
             }
+
+            addPluginTranslations(l, data);
+
             currentLocale = locale;
             activeTranslations = data;
             callChangeLangEvent(locale);
         });
+    }
+
+    private void addPluginTranslations(String locale, JsonObject data) {
+        for (DbxPlugin p : Registry.instance().getPlugins()) {
+            HashMap<String, String> plData = p.getLanguageData().getOrDefault(locale, null);
+            if (!locale.equalsIgnoreCase("en_us") && plData == null) plData = p.getLanguageData().getOrDefault("en_us", null);
+            if (plData != null) {
+                for (String key: plData.keySet()) {
+                    data.addProperty(key, plData.get(key));
+                }
+            }
+        }
     }
 
     public List<String> getFriendlyNames() {
