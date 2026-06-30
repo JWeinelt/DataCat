@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://databench.dev/dbx/manifest.schema.json",
+  "$id": "https://data-cat.de/dbx/manifest.schema.json",
   "type": "object",
   "required": ["formatVersion", "createdAt", "tool", "source", "export"],
   "additionalProperties": false,
@@ -47,7 +47,7 @@
       "properties": {
         "mode": {
           "type": "string",
-          "enum": ["DATABENCH"]
+          "enum": ["DATACAT"]
         },
 
         "databases": {

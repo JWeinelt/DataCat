@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.julianweinelt.databench</groupId>
-    <artifactId>DataBench</artifactId>
-    <version>1.0.0</version>
+    <groupId>de.julianweinelt.datacat</groupId>
+    <artifactId>DataCat</artifactId>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>ui</module>
@@ -14,6 +14,8 @@
         <module>server</module>
         <module>flow</module>
         <module>dbx</module>
+        <module>reporter</module>
+        <module>datacat-maven-plugin</module>
     </modules>
 
     <properties>
@@ -22,14 +24,46 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-
-
     <distributionManagement>
         <repository>
-            <id>unifiedvision-releases</id>
-            <url>https://repo.codeblocksmc.de/public</url>
-            <name>Maven Repository</name>
+            <id>julianweinelt-releases</id>
+            <url>https://repo.julianweinelt.de/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>https://repo.codeblocksmc.com/repository/maven-snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+
+                <configuration>
+                    <tags>
+                        <tag>
+                            <name>apiNote</name>
+                            <placement>a</placement>
+                            <head>API Note:</head>
+                        </tag>
+
+                        <tag>
+                            <name>implSpec</name>
+                            <placement>a</placement>
+                            <head>Implementation Requirements:</head>
+                        </tag>
+
+                        <tag>
+                            <name>implNote</name>
+                            <placement>a</placement>
+                            <head>Implementation Note:</head>
+                        </tag>
+                    </tags>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

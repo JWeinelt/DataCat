@@ -1,6 +1,6 @@
-# Contributing to DataBench
+# Contributing to DataCat
 
-Thank you for your interest in contributing to **DataBench**! We welcome contributions of all kinds: code, documentation, bug reports, or ideas. This guide explains how to get started and how we collaborate effectively.
+Thank you for your interest in contributing to **DataCat**! We welcome contributions of all kinds: code, documentation, bug reports, or ideas. This guide explains how to get started and how we collaborate effectively.
 
 ---
 
@@ -13,7 +13,7 @@ All contributors are expected to follow our **Code of Conduct**:
 - Avoid personal attacks, harassment, or offensive language.
 - Focus discussions on **issues, code, and ideas**, not people.
 
-We want DataBench to be a welcoming environment for everyone.
+We want DataCat to be a welcoming environment for everyone.
 
 ---
 
@@ -32,7 +32,7 @@ You can contribute in several ways:
 2. Clone your fork:
 
 ```git
-git clone [https://github.com/YOUR_USERNAME/DataBench.git](https://github.com/YOUR_USERNAME/DataBench.git)
+git clone [https://github.com/YOUR_USERNAME/DataCat.git](https://github.com/YOUR_USERNAME/DataCat.git)
 ```
 
 3. Create a new branch for your changes:
@@ -72,7 +72,7 @@ When your changes are ready:
 git push origin feat/my-feature
 ```
 
-2. Open a Pull Request on the main DataBench repository.
+2. Open a Pull Request on the main DataCat repository.
 3. In your PR description, explain:
    - What you changed
    - Why it is useful

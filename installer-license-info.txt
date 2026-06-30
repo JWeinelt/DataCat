@@ -1,6 +1,6 @@
 LICENSE AGREEMENT
 
-This software "DataBench" is being published under the GNU General Public License Version 3 (GNU GPLv3).
+This software "DataCat" is being published under the GNU General Public License Version 3 (GNU GPLv3).
 
 The GPLv3 is a free open-source license that grants you the right to use, inspect, modify and redistribute this software under the terms of the license.
 This means:
@@ -8,7 +8,7 @@ This means:
 - Modified versions must be redistributed under the GPLv3.
 - This program is distributed WITHOUT ANY WARRANTY.
 
-By installing and using this software, you acknowledge that DataBench is licensed under the GNU General Public License Version 3 and that any copying, modification or redistribution is subject to its terms.
+By installing and using this software, you acknowledge that DataCat is licensed under the GNU General Public License Version 3 and that any copying, modification or redistribution is subject to its terms.
 The full license can be found below.
 
 

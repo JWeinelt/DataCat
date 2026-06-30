@@ -1,5 +1,13 @@
-CREATE SCHEMA IF NOT EXISTS databench_flow;
-USE databench_flow;
+-- !!! VERSION:1.0.0 !!! --
+-- !!! CREATED: 2026-02-26 12:00:00 !!! --
+
+CREATE SCHEMA IF NOT EXISTS datacat_flow;
+USE datacat_flow;
+
+CREATE TABLE meta (
+    KeyName VARCHAR(255) NOT NULL PRIMARY KEY,
+    Value VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE users (
     user_id            BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -107,3 +115,8 @@ CREATE TABLE step_runs (
     FOREIGN KEY (job_run_id) REFERENCES job_runs(job_run_id),
     FOREIGN KEY (step_id) REFERENCES job_steps(step_id)
 );
+
+INSERT INTO meta (KeyName, Value) VALUES ('version', '1.0.0'),
+                                         ('created', '2026-02-26 12:00:00'),
+                                         ('last_updated', '2026-02-26 12:00:00'),
+                                         ('script_executed', CONVERT(CURRENT_TIMESTAMP, VARCHAR (255)));

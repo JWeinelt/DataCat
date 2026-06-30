@@ -8,10 +8,10 @@
 
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/databench.launcher.log</file>
+        <file>logs/datacat.launcher.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/databench.launcher.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/datacat.launcher.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>14</maxHistory>
         </rollingPolicy>
 
@@ -20,10 +20,10 @@
         </encoder>
     </appender>
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/databench.launcher-debug.log</file>
+        <file>logs/datacat.launcher-debug.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/databench.launcher-debug.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/datacat.launcher-debug.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
 

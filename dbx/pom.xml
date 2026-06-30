@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>de.julianweinelt.databench</groupId>
-        <artifactId>DataBench</artifactId>
-        <version>1.0.0</version>
+        <groupId>de.julianweinelt.datacat</groupId>
+        <artifactId>DataCat</artifactId>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>dbx</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.5</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,25 +18,51 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+
     <distributionManagement>
         <repository>
-            <id>unifiedvision-releases</id>
-            <url>https://repo.codeblocksmc.de/public</url>
-            <name>Maven Repository</name>
+            <id>julianweinelt-releases</id>
+            <url>https://repo.julianweinelt.de/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>julianweinelt-snapshots</id>
+            <url>https://repo.julianweinelt.de/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.46</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.19</version>
+            <version>1.5.26</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.42</version>
+            <version>1.18.46</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -48,6 +74,12 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>26.0.2-1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.22.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
