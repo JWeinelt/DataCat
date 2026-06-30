@@ -2,6 +2,7 @@ package de.julianweinelt.datacat.data;
 
 import com.formdev.flatlaf.util.ColorFunctions;
 import de.julianweinelt.datacat.api.ImagePanel;
+import de.julianweinelt.datacat.dbx.database.DatabaseMetaData;
 import de.julianweinelt.datacat.dbx.database.DatabaseRegistry;
 import de.julianweinelt.datacat.ui.BenchUI;
 import lombok.Getter;
@@ -59,12 +60,15 @@ public class Project {
 
     public JPanel createCard(BenchUI ui) {
         String theme = Configuration.getConfiguration().getSelectedTheme();
-        URL iU = getClass().getResource("/icons/engine/" + DatabaseRegistry.instance().getMeta(databaseType).engineName() + ".png");
+        DatabaseMetaData metaData = DatabaseRegistry.instance().getMeta(databaseType);
         Image img;
         JPanel card;
-        if (iU != null) {
-            img = new ImageIcon(iU).getImage();
-            card = new ImagePanel(img);
+        if (metaData != null) {
+            URL iU = getClass().getResource("/icons/engine/" + metaData.engineName() + ".png");
+            if (iU != null) {
+                img = new ImageIcon(iU).getImage();
+                card = new ImagePanel(img);
+            } else card = new JPanel();
         } else card = new JPanel();
 
         Color borderColor = UIManager.getColor("Component.borderColor");
