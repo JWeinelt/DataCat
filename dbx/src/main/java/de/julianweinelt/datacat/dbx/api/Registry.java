@@ -115,6 +115,8 @@ public class Registry {
                 listeners.putIfAbsent(eventName, new ArrayList<>());
                 listeners.get(eventName).add(new EventListener(listener, method, priority));
                 listeners.get(eventName).sort(Comparator.comparing(EventListener::getPriority));
+
+                log.info("Registered listener {} for event {}", method.getName(), eventName);
             }
         }
     }
@@ -126,12 +128,13 @@ public class Registry {
      * @param event the event to dispatch
      */
     public void callEvent(Event event) {
-        log.debug("Called event {}", event.getName());
+        log.info("Called event {}", event.getName());
         List<EventListener> eventListeners = listeners.get(event.getName());
         if (eventListeners != null) {
             for (EventListener listener : eventListeners) {
                 try {
                     if (listener.getMethod().isAnnotationPresent(IgnoreCancelled.class) || !event.isCancelled()) {
+                        log.info("Invoking listener {} for event {}", listener.getMethod().getName(), event.getName());
                         listener.invoke(event);
                     }
                 } catch (Exception e) {
