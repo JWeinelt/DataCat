@@ -64,7 +64,7 @@ These points will help with prioritization:
 * [X] Schema Browser
 * [X] Table Designer
 * [ ] Index management
-* [ ] Migration Tool
+* [X] Migration Tool
 * [X] Import / Export (SQL, CSV, JSON)
 
 ### Security

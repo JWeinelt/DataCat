@@ -1,4 +1,7 @@
-[![Build Status](http://ci.julianweinelt.de/job/DataCat/badge/icon?subject=Build)](http://ci.julianweinelt.de/job/DataCat/) [![Tag](https://img.shields.io/github/v/tag/JWeinelt/DataCat)](https://github.com/Jweinelt/DataCat) [![Stars](https://img.shields.io/github/stars/JWeinelt/DataCat?style=flat)]() [![License](https://img.shields.io/github/license/JWeinelt/DataCat
+[![Build Status](https://ci.julianweinelt.de/buildStatus/icon?job=DataCat&style=plastic)](https://ci.julianweinelt.de/view/all/job/DataCat-MariaDB/)
+[![Tag](https://img.shields.io/github/v/tag/JWeinelt/DataCat)](https://github.com/Jweinelt/DataCat) 
+[![Stars](https://img.shields.io/github/stars/JWeinelt/DataCat?style=flat)]() 
+[![License](https://img.shields.io/github/license/JWeinelt/DataCat
 )]()
 
 
