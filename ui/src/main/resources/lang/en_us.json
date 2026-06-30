@@ -226,6 +226,14 @@
   "dialog.import.import-failed.text": "Could not finish import process.\nMessage: ${error}",
   "dialog.import.log.error.prefix": "[ERROR]",
 
+  "dialog.native-lib.load.title": "Load a native library",
+  "dialog.native-lib.load.message.optional": "The Plugin ${plugin} recommends installing the following native libraries:",
+  "dialog.native-lib.load.message.required": "The Plugin ${plugin} requires you to install the following native libraries:",
+  "dialog.native-lib.load.message.warning.title": "Warning",
+  "dialog.native-lib.load.message.warning.message": "Native libraries will allow a plugin to execute native code.\nDO NOT INSTALL NATIVE LIBRARIES FROM UNTRUSTED SOURCES!",
+  "dialog.native-lib.load.btn.load": "Trust source and load",
+  "dialog.native-lib.load.btn.cancel": "Do not load",
+
 
   "project.tabs.flow": "Flow",
 
