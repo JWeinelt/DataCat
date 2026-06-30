@@ -1,11 +1,15 @@
 package de.julianweinelt.datacat.dbx.api.drivers;
 
 import de.julianweinelt.datacat.dbx.api.exceptions.NoDriverFoundException;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public final class DriverDownloadManager {
+    @Getter
     private final List<PluginDriver> registeredDrivers = new ArrayList<>();
 
     private static DriverDownloadManager instance;
@@ -18,7 +22,18 @@ public final class DriverDownloadManager {
     }
 
     public void register(PluginDriver driver) {
+        log.info("Registering plugin driver for {}", driver.getInternalName());
         registeredDrivers.add(driver);
+    }
+
+    public PluginDriver[] registeredDrivers() {
+        PluginDriver[] drivers = new PluginDriver[registeredDrivers.size()];
+        return registeredDrivers.toArray(drivers);
+    }
+
+    public PluginDriver byInternalName(String internalName) {
+        for (PluginDriver driver : registeredDrivers) if (driver.getInternalName().equals(internalName)) return driver;
+        return null;
     }
 
     public DriverDownloadWrapper.DriverDownload fromDB(String db, String version) {

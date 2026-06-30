@@ -15,6 +15,7 @@ import java.util.concurrent.CompletionException;
 import java.util.function.IntConsumer;
 
 @Slf4j
+@Deprecated(since = "1.0.1-beta.2", forRemoval = true)
 public final class DriverDownloader {
 
     private static final HttpClient CLIENT = HttpClient.newBuilder()

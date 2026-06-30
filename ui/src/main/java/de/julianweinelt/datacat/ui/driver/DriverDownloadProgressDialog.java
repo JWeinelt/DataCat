@@ -118,6 +118,7 @@ public class DriverDownloadProgressDialog extends JDialog {
                             )),
                             translate("dialog.driver.download.success.title"),
                             JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
                 } catch (Exception e) {
                     statusLabel.setText("Download failed.");
                     JOptionPane.showMessageDialog(DriverDownloadProgressDialog.this,

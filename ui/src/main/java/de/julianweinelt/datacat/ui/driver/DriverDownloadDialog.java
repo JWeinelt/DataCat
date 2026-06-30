@@ -3,9 +3,11 @@ package de.julianweinelt.datacat.ui.driver;
 import de.julianweinelt.datacat.dbx.api.DbxAPI;
 import de.julianweinelt.datacat.dbx.api.drivers.DriverDownloadManager;
 import de.julianweinelt.datacat.dbx.api.drivers.DriverDownloadWrapper;
+import de.julianweinelt.datacat.dbx.api.drivers.DriverManagerService;
 import de.julianweinelt.datacat.dbx.api.drivers.PluginDriver;
 import de.julianweinelt.datacat.dbx.api.exceptions.NoDriverFoundException;
 import de.julianweinelt.datacat.dbx.util.LanguageManager;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +15,10 @@ import java.util.Map;
 
 import static de.julianweinelt.datacat.dbx.util.LanguageManager.translate;
 
+@Slf4j
 public class DriverDownloadDialog extends JDialog {
 
-    private final JComboBox<String> dbTypeBox;
+    private final JComboBox<PluginDriver> dbTypeBox;
     private final JComboBox<String> versionBox;
 
     @Deprecated(since = "1.0.1-beta.1", forRemoval = true)
@@ -92,6 +95,12 @@ public class DriverDownloadDialog extends JDialog {
         return translationID.replace("driver.database.", "").replace(".name", "");
     }
 
+    public DriverDownloadDialog(Window parent, boolean model, String preSelect) {
+        this(parent, model);
+
+        dbTypeBox.setSelectedItem(DriverDownloadManager.instance().byInternalName(preSelect));
+    }
+
     public DriverDownloadDialog(Window parent, boolean modal) {
         super(parent, translate("dialog.driver.download.title"), ModalityType.APPLICATION_MODAL);
         setSize(520, 360);
@@ -103,13 +112,7 @@ public class DriverDownloadDialog extends JDialog {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        String[] dbEngines = new String[DriverDownloadManager.instance().registeredDriverCount()];
-        int i = 0;
-        for (String s : DriverDownloadManager.instance().registeredDriverNames()) {
-            dbEngines[i++] = LanguageManager.translate("driver.database." + s + ".name");
-        }
-
-        dbTypeBox = new JComboBox<>(dbEngines);
+        dbTypeBox = new JComboBox<>(DriverDownloadManager.instance().registeredDrivers());
         versionBox = new JComboBox<>();
 
         gbc.gridx = 0; gbc.gridy = 0;
@@ -153,11 +156,9 @@ public class DriverDownloadDialog extends JDialog {
         });
 
         downloadButton.addActionListener(e -> {
-            String db = (String) dbTypeBox.getSelectedItem();
-            if (db == null) return;
             String version = (String) versionBox.getSelectedItem();
 
-            PluginDriver pluginDriver = DriverDownloadManager.instance().byName(fromTranslatedName(db));
+            PluginDriver pluginDriver = (PluginDriver) dbTypeBox.getSelectedItem();
 
             if (pluginDriver == null) return;
 
@@ -167,18 +168,16 @@ public class DriverDownloadDialog extends JDialog {
                             + (pluginDriver.isZippedFile() ? "." + pluginDriver.archiveType() : ".jar"));
 
             new DriverDownloadProgressDialog(this, driverDownload.url(), DbxAPI.driversFolder(),
-                    driverDownload, db, version).setVisible(true);
+                    driverDownload, pluginDriver.getInternalName(), version).setVisible(true);
         });
     }
 
     private void updateVersions() {
-        String selectedDb = (String) dbTypeBox.getSelectedItem();
-        PluginDriver d = DriverDownloadManager.instance().byName(fromTranslatedName(selectedDb));
-        if (d == null) throw new NoDriverFoundException(selectedDb);
-        d.defineVersionsASync().join();
+        PluginDriver selectedDb = (PluginDriver) dbTypeBox.getSelectedItem();
+        if (selectedDb == null) return;
+        selectedDb.defineVersionsASync().join();
         versionBox.removeAllItems();
-        if (selectedDb != null) {
-            d.getAvailableVersions().forEach(v -> versionBox.addItem(v.versionName()));
-        }
+
+        selectedDb.getAvailableVersions().forEach(v -> versionBox.addItem(v.versionName()));
     }
 }
