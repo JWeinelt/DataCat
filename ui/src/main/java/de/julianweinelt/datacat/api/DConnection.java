@@ -512,24 +512,13 @@ public class DConnection implements IFileWatcherListener {
                 log.warn("SQL Server (Windows Auth) connection failed: {}", ex.getMessage());
             }
             future.completeExceptionally(ex);
+            return future;
         } finally {
             current.setContextClassLoader(previous);
         }
 
         String ver = getDatabaseTypeFromDB();
         log.info("Connected to {} as {}", project.getServer(), ver);
-        if (ver.contains("MariaDB") && databaseTypeMeta.engineName().equals("mysql")) {
-            int result = JOptionPane.showConfirmDialog(benchUI.getFrame(), "DataCat has detected that your project is configured as MySQL\n" +
-                    "but your server returned 'MariaDB'. Should it be updated in the project?", "Database Mismatch", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (result == JOptionPane.YES_OPTION) {
-                project.setDatabaseType("mariadb");
-                try {
-                    ProjectManager.instance().saveProjectFile(project, SecretManager.loadPassword());
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(benchUI.getFrame(), "Failed to save project file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
         return future;
     }
 
@@ -556,6 +545,7 @@ public class DConnection implements IFileWatcherListener {
             if (set.next()) return set.getString(1);
         } catch (SQLException e) {
             log.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return "Unknown";
     }
