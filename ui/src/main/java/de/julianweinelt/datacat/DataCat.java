@@ -167,15 +167,14 @@ public class DataCat {
 
         languageManager = new LanguageManager(devMode);
         log.info("Loading language data...");
-        languageManager.preload(Configuration.getConfiguration().getLocale()).thenAccept(v -> latch.countDown());
         api.getRegistry().registerListener(languageManager, api.getSystemPlugin());
 
         log.info("Starting plugin service...");
         log.info("Loading plugins...");
-        pluginLoader = new PluginLoader(api);
         yarnLoader = new YarnLoader();
-        yarnLoader.discoverYarns();
+        pluginLoader = new PluginLoader(api);
         pluginLoader.loadAll();
+        languageManager.preload(Configuration.getConfiguration().getLocale()).thenAccept(v -> latch.countDown());
 
         log.info("Initializing UI...");
         ui = new BenchUI();
@@ -247,6 +246,7 @@ public class DataCat {
         Registry.instance().callEvent(new Event("UIServiceEnabledEvent").set("service", UIService.instance()));
 
         startScreen.stop();
+        Registry.instance().callEvent(new Event("UIInitializedEvent").set("frame", ui.getFrame()));
         SwingUtilities.invokeLater(() -> ui.loadTheme(true));
 
     }
