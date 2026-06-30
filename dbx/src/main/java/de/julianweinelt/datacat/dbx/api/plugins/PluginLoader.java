@@ -23,6 +23,8 @@ import java.util.zip.ZipEntry;
 public final class PluginLoader {
     private final Gson GSON = new Gson();
 
+    private static PluginLoader instance;
+
     private final Registry registry;
     private final DbxPlugin plugin;
     private final PluginScanner scanner = new PluginScanner();
@@ -33,7 +35,12 @@ public final class PluginLoader {
 
     private final ClassLoader parentLoader = getClass().getClassLoader();
 
+    public static PluginLoader instance() {
+        return instance;
+    }
+
     public PluginLoader(DbxAPI api) {
+        instance = this;
         this.registry = api.getRegistry();
         this.plugin = api.getSystemPlugin();
         registerEvents();
@@ -131,7 +138,7 @@ public final class PluginLoader {
             HashMap<String, HashMap<String, String>> languageData = new HashMap<>();
             ZipEntry langEntry = jarFile.getEntry("language.json");
             if (langEntry == null) {
-                log.debug("Plugin {} does not contain a language.json file.", name);
+                log.info("Plugin {} does not contain a language.json file.", name);
             } else {
                 Type type = new TypeToken<HashMap<String, HashMap<String, String>>>() {}.getType();
                 try (InputStream iS = jarFile.getInputStream(langEntry)) {
